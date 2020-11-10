@@ -6,6 +6,7 @@
         vars:
             DIR_INSTALL : "teste"
             URL_GOLANG_INSTALL : "https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz"
+            GOLANG_DIST_FILE_NAME : "go1.14.4.linux-amd64.tar.gz"
         tasks:
             - name: Environment validation!
               assert:
@@ -31,7 +32,7 @@
             - name: Download Go 1.14.4
               get_url: 
                 url="{{ URL_GOLANG_INSTALL }}"
-                dest="./go1.14.4.gz"
+                dest="./{{ GOLANG_DIST_FILE_NAME }}"
             
             
     
