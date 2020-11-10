@@ -5,6 +5,7 @@
         remote_user: root
         vars:
             DIR_INSTALL : "teste"
+            URL_GOLANG_INSTALL : "https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz"
         tasks:
             - name: Environment validation!
               assert:
@@ -22,7 +23,15 @@
                     update_cache: yes
 
             - name: Start Mongo-DB
-              become: yes
               shell:  sudo systemctl start mongodb
+
+            - name: Remove Go-lang
+              shell:  sudo rm -rf /usr/local/go
                   
+            - name: Download Go 1.14.4
+              get_url: 
+                url="{{ URL_GOLANG_INSTALL }}"
+                dest="./go1.14.4.gz"
+            
+            
     
