@@ -9,7 +9,7 @@
             - name: Environment validation!
               assert:
                 that:
-                  - ansible_memtotal_mb >= 4000
+                  - ansible_memtotal_mb >= 3500
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
             - name: Upgrade all apt packages
