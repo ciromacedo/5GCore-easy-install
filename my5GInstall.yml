@@ -22,6 +22,7 @@
                     update_cache: yes
 
             - name: Start Mongo-DB
+              become: yes
               shell:  sudo systemctl start mongodb
                   
     
