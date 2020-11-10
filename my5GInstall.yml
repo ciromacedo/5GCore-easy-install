@@ -34,5 +34,11 @@
                 url="{{ URL_GOLANG_INSTALL }}"
                 dest="./{{ GOLANG_DIST_FILE_NAME }}"
             
-            
-    
+            - name: Install Go 1.14.4
+              shell: | 
+                sudo tar -C /usr/local -zxvf {{ GOLANG_DIST_FILE_NAME }}
+                mkdir -p ~/go/{bin,pkg,src}
+                echo 'export GOPATH=$HOME/go' >> ~/.bashrc
+                echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
+                echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
+                source ~/.bashrc
