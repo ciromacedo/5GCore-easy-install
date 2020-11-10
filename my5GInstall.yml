@@ -1,0 +1,27 @@
+---
+    -   hosts: 127.0.0.1
+        connection: local
+        become: yes
+        remote_user: root
+        vars:
+            DIR_INSTALL : "teste"
+        tasks:
+            - name: Environment validation!
+              assert:
+                that:
+                  - ansible_memtotal_mb >= 4000
+                msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
+    
+            - name: Upgrade all apt packages
+              apt: upgrade=dist force_apt_get=yes
+            
+            - name: Install Basic requirements
+              apt:
+                    name: ['mongodb', 'wget', 'git', 'ca-certificates', 'net-tools']
+                    state: present
+                    update_cache: yes
+
+            - name: Start Mongo-DB
+              shell:  sudo systemctl start mongodb
+                  
+    
