@@ -46,5 +46,4 @@
                 echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
 
             - name: Install Go 1.14.4 - 3/3
-              shell: | 
-                source ~/.bashrc
+              shell: source ~/.bashrc
