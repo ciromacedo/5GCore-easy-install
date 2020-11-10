@@ -47,3 +47,5 @@
 
             - name: Install Go 1.14.4 - 3/3
               shell: source ~/.bashrc
+              args:
+                executable: /bin/bash
