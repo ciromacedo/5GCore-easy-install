@@ -24,6 +24,11 @@ Install Ansible:
 sudo apt -y install ansible
 ```
 
+Install Ansible-Galaxy Golang role:
+```
+ansible-galaxy install abdennour.golang
+```
+
 Check your kernel version with ```uname -r```, if the result is less then ```5.0.0-23-generic``` run the following:
 ```
 sudo apt-get install -y linux-image-5.0.0-23-generic

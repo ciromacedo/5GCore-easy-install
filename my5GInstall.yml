@@ -28,36 +28,20 @@
 
             - name: Remove Go-lang
               shell:  sudo rm -rf /usr/local/go
-                  
-            - name: Download Go 1.14.4
-              get_url: 
-                url="{{ URL_GOLANG_INSTALL }}"
-                dest="./{{ GOLANG_DIST_FILE_NAME }}"
-            
-            - name: Install Go 1.14.4 - 1/3
-              shell: | 
-                sudo tar -xvf {{ GOLANG_DIST_FILE_NAME }}
-                sudo mv go /usr/local
-                sudo rm {{ GOLANG_DIST_FILE_NAME }}
 
-            - name: Install Go 1.14.4 - 2/3
-              shell: | 
-                echo 'export GOPATH=$HOME/go' >> ~/.bashrc
-                echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
-                echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
-
-            - name: Install Go 1.14.4 - 3/3
-              shell: source ~/.bashrc
-              args:
-                executable: /bin/bash
+            - import_role:
+                name: abdennour.golang
+              become: yes
+              vars:
+                golang_version: "1.14"
+                golang_packages:
+                - github.com/sirupsen/logrus
+                - github.com/calee0219/fatal
+                golang_users:
+                - "{{ ansible_ssh_user}}" # "{{ ansible_ssh_user}}" might be suitable
 
             - pause :
                 seconds: 5
-
-            - name: Go get [sirupsen, calee0219]
-              shell: | 
-                go get -u github.com/sirupsen/logrus
-                go get -u github.com/calee0219/fatal
 
             - git: 
                 repo: 'https://github.com/PrinzOwO/gtp5g.git'
