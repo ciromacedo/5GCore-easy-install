@@ -30,6 +30,11 @@
 
             - name: Remove Go-lang install
               shell:  sudo rm -rf /usr/local/go
+              ignore_errors: true
+
+            - name: Remove GTP5G
+              shell:  sudo rm -rf {{ GTP5G_DIR_INSTALL }}
+              ignore_errors: true
 
             - git: 
                 repo: 'https://github.com/PrinzOwO/gtp5g.git'
