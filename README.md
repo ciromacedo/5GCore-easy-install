@@ -36,7 +36,7 @@ In the action menu that appears, choose the first option "__install the package 
 
 Run ```ifconfig``` and get the name of **internet network interface**, like as illustrated in the figure below:
 <p align="center">
-    <img src="imagens/if_config.PNG"/> 
+    <img src="imagens/if_config.png"/> 
 </p>
 
 
