@@ -29,19 +29,15 @@
             - name: Remove Go-lang
               shell:  sudo rm -rf /usr/local/go
 
-            - import_role:
-                name: abdennour.golang
-              become: yes
-              vars:
-                golang_version: "1.14"
-                golang_packages:
-                - github.com/sirupsen/logrus
-                - github.com/calee0219/fatal
-                golang_users:
-                - "{{ ansible_ssh_user}}" # "{{ ansible_ssh_user}}" might be suitable
+            - name: Add Go Apt Repository on PPA
+              shell:  yes '' | sudo add-apt-repository ppa:longsleep/golang-backports
 
-            - pause :
-                seconds: 5
+            - name: Apt Update
+              shell:  sudo apt update
+
+            - name: Install Goo
+              shell: sudo apt install golang-go
+
 
             - git: 
                 repo: 'https://github.com/PrinzOwO/gtp5g.git'
