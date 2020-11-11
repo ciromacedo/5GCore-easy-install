@@ -38,11 +38,11 @@
 
             - git: 
                 repo: 'https://github.com/PrinzOwO/gtp5g.git'
-                dest: {{ GTP5G_DIR_INSTALL }}
+                dest: "{{ GTP5G_DIR_INSTALL }}"
                 version: v0.1.0
 
             - name: Install linux-headers-5.0.0-23-generic
-              shell:  sudo apt-get install linux-headers-5.0.0-23-generic
+              shell:  sudo apt-get install -y linux-headers-5.0.0-23-generic
 
             - name  : Run 'Make' into GTP5G
               shell : make
