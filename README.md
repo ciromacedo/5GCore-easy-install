@@ -24,6 +24,13 @@ Install Ansible:
 sudo apt -y install ansible
 ```
 
+Check your kernel version with ```uname -r```, if the result is less then ```5.0.0-23-generic``` run the following:
+```
+sudo apt-get install -y linux-image-5.0.0-23-generic
+```
+In the action menu that appears, choose the first option.
+
+
 Run the following Ansible playbook (password for sudo is required):
 ```
 cd my5GCore-install && ansible-playbook -K my5GInstall.yml
