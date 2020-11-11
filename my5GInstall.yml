@@ -73,7 +73,7 @@
 
             - git: 
                 repo: 'https://github.com/my5G/my5Gcore.git'
-                dest: "{{{ MY5GC_DIR_INSTALL }}"
+                dest: '{{{ MY5GC_DIR_INSTALL }}'
                 version: master
 
             - name  : Clone my5GCore project
@@ -82,6 +82,18 @@
                     git submodule update --init --jobs `nproc`
                     git submodule foreach git checkout master
                     git submodule foreach git pull --jobs `nproc`
+              args:
+                chdir: "{{ MY5GC_DIR_INSTALL }}"
+
+
+            - name  : my5GCore - Install dependent packages
+              shell : go mod download
+              args:
+                chdir: "{{ MY5GC_DIR_INSTALL }}"
+
+
+            - name  : my5GCore - Compile network function services
+              shell : make all
               args:
                 chdir: "{{ MY5GC_DIR_INSTALL }}"
 
