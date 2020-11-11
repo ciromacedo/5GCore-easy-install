@@ -59,7 +59,7 @@
                 go get -u github.com/sirupsen/logrus
                 go get -u github.com/calee0219/fatal
 
-            - git: Get Linux kernel module 5G GTP-U
-                repo: https://github.com/PrinzOwO/gtp5g.git
-                dest: /root
+            - git: 
+                repo: 'https://github.com/PrinzOwO/gtp5g.git'
+                dest: /root/gtp5g
                 version: v0.1.0
