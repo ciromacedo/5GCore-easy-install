@@ -15,7 +15,7 @@ sudo apt -y install git
 
 Clone this repository:
 ```
-git clone https://github.com/ciromacedo/my5GCore-install.git
+git clone https://github.com/ciromacedo/my5GCore-easy-install.git
 ```
 
 Install Ansible:
