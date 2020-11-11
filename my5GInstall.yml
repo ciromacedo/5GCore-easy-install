@@ -14,30 +14,23 @@
                   - ansible_memtotal_mb >= 3500
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
+            - name: Add Go 1.15 Apt Repository on PPA
+              shell:  yes '' | sudo add-apt-repository ppa:longsleep/golang-backports
+
             - name: Upgrade all apt packages
               apt: upgrade=dist force_apt_get=yes
             
             - name: Install Basic requirements
               apt:
-                    name: ['mongodb', 'wget', 'git', 'ca-certificates', 'net-tools', 'gcc', 'cmake', 'autoconf', 'build-essential', 'libtool', 'pkg-config', 'libmnl-dev', 'libyaml-dev']
+                    name: ['mongodb', 'wget', 'git', 'ca-certificates', 'net-tools', 'gcc', 'cmake', 'autoconf', 'build-essential', 'libtool', 'pkg-config', 'libmnl-dev', 'libyaml-dev', 'golang-go']
                     state: present
                     update_cache: yes
 
             - name: Start Mongo-DB
               shell:  sudo systemctl start mongodb
 
-            - name: Remove Go-lang
+            - name: Remove Go-lang install
               shell:  sudo rm -rf /usr/local/go
-
-            - name: Add Go Apt Repository on PPA
-              shell:  yes '' | sudo add-apt-repository ppa:longsleep/golang-backports
-
-            - name: Apt Update
-              shell:  sudo apt update
-
-            - name: Install Goo
-              shell: sudo apt install golang-go
-
 
             - git: 
                 repo: 'https://github.com/PrinzOwO/gtp5g.git'
