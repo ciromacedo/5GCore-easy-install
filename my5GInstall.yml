@@ -38,6 +38,7 @@
               shell: | 
                 sudo tar -xvf {{ GOLANG_DIST_FILE_NAME }}
                 sudo mv go /usr/local
+                sudo rm {{ GOLANG_DIST_FILE_NAME }}
 
             - name: Install Go 1.14.4 - 2/3
               shell: | 
@@ -59,6 +60,6 @@
                 go get -u github.com/calee0219/fatal
 
             - git: Get Linux kernel module 5G GTP-U
-                repo: 'https://github.com/PrinzOwO/gtp5g.git'
+                repo: https://github.com/PrinzOwO/gtp5g.git
                 dest: /root
                 version: v0.1.0
