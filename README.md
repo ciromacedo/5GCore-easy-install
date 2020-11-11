@@ -31,7 +31,7 @@ sudo apt-get install -y linux-image-5.0.0-23-generic
 In the action menu that appears, choose the first option.
 
 <p align="center">
-    <img src="images/kerner-5-0-23.jpeg" height="300"/> 
+    <img src="imagens/kerner-5-0-23.jpeg" height="300"/> 
 </p>
 
 
