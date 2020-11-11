@@ -34,8 +34,13 @@ In the action menu that appears, choose the first option "__install the package 
     <img src="imagens/kerner-5-0-23.jpeg" height="300"/> 
 </p>
 
+Run ```ifconfig``` and get the name of **internet network interface**, like as illustrated in the figure below:
+<p align="center">
+    <img src="images/if_config.PNG"/> 
+</p>
+
 
 Run the following Ansible playbook (password for sudo is required):
 ```
-cd my5GCore-install && ansible-playbook -K my5GInstall.yml
+cd my5GCore-install && ansible-playbook -K my5GInstall.yml -e  "internet_network_interface=<< internet network interface name>>"
 ```
