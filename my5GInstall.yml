@@ -50,7 +50,15 @@
               args:
                 executable: /bin/bash
 
+            - pause :
+                seconds: 3
+
             - name: Go get [sirupsen, calee0219]
               shell: | 
                 go get -u github.com/sirupsen/logrus
                 go get -u github.com/calee0219/fatal
+
+            - git: Get Linux kernel module 5G GTP-U
+                repo: 'https://github.com/PrinzOwO/gtp5g.git'
+                dest: /root
+                version: v0.1.0
