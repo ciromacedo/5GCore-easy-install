@@ -4,13 +4,13 @@
         become: yes
         remote_user: root
         vars:
-            DIR_INSTALL : "teste"
             GTP5G_DIR_INSTALL : "/root/gtp5g"
+            MY5GC_DIR_INSTALL : "/root/my5Gcore"
         tasks:
             - fail: 
                 msg: "'internet_network_interface' not found, this parameter is required!"
               when: internet_network_interface == ''
-              
+
             - name: Environment validation!
               assert:
                 that:
@@ -36,8 +36,12 @@
               shell:  sudo rm -rf /usr/local/go
               ignore_errors: true
 
-            - name: Remove GTP5G
+            - name: Remove GTP5G (if exists)
               shell:  sudo rm -rf {{ GTP5G_DIR_INSTALL }}
+              ignore_errors: true
+
+            - name: Remove my5GC dir (if exists)
+              shell:  sudo rm -rf {{ MY5GC_DIR_INSTALL }}
               ignore_errors: true
 
             - git: 
@@ -63,5 +67,22 @@
 
             - name  : Network Setting 2/3
               shell : sudo iptables -t nat -A POSTROUTING -o {{ internet_network_interface }} -j MASQUERADE
+
+            - name  : Network Setting 3/3
+              shell : sudo systemctl stop ufw
+
+            - git: 
+                repo: 'https://github.com/my5G/my5Gcore.git'
+                dest: "{{{ MY5GC_DIR_INSTALL }}"
+                version: master
+
+            - name  : Clone my5GCore project
+              shell : |
+                    git submodule sync
+                    git submodule update --init --jobs `nproc`
+                    git submodule foreach git checkout master
+                    git submodule foreach git pull --jobs `nproc`
+              args:
+                chdir: "{{ MY5GC_DIR_INSTALL }}"
 
                 
