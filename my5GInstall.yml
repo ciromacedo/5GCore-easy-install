@@ -52,7 +52,7 @@
                 executable: /bin/bash
 
             - pause :
-                seconds: 3
+                seconds: 5
 
             - name: Go get [sirupsen, calee0219]
               shell: | 
