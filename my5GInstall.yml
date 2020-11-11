@@ -5,8 +5,7 @@
         remote_user: root
         vars:
             DIR_INSTALL : "teste"
-            URL_GOLANG_INSTALL : "https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz"
-            GOLANG_DIST_FILE_NAME : "go1.14.4.linux-amd64.tar.gz"
+            GTP5G_DIR_INSTALL : "/root/gtp5g"
         tasks:
             - name: Environment validation!
               assert:
@@ -34,5 +33,20 @@
 
             - git: 
                 repo: 'https://github.com/PrinzOwO/gtp5g.git'
-                dest: /root/gtp5g
+                dest: {{ GTP5G_DIR_INSTALL }}
                 version: v0.1.0
+
+            - name: Install linux-headers-5.0.0-23-generic
+              shell:  sudo apt-get install linux-headers-5.0.0-23-generic
+
+            - name  : Run 'Make' into GTP5G
+              shell : make
+              args:
+                chdir: "{{ GTP5G_DIR_INSTALL }}"
+
+            - name  : Install GTP5G
+              shell : sudo make install
+              args:
+                chdir: "{{ GTP5G_DIR_INSTALL }}"
+
+                
