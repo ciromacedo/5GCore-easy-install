@@ -73,7 +73,7 @@
 
             - git: 
                 repo: 'https://github.com/my5G/my5Gcore.git'
-                dest: '{{{ MY5GC_DIR_INSTALL }}'
+                dest: '{{ MY5GC_DIR_INSTALL }}'
                 version: master
 
             - name  : Clone my5GCore project
