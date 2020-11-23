@@ -43,5 +43,5 @@ Run ```ifconfig``` and get the name of **internet network interface**, like as i
 
 Run the following Ansible playbook (password for sudo is required):
 ```
-cd my5GCore-install && ansible-playbook -K my5GInstall.yml -e  "internet_network_interface=<< internet network interface name>>"
+cd my5GCore-easy-install && ansible-playbook -K my5GInstall.yml -e  "internet_network_interface=<< internet network interface name>>"
 ```
