@@ -61,8 +61,10 @@
                     echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
                     echo 'export GO111MODULE=auto' >> ~/.bashrc
 
-#            - name: Install Go 1.14.4 - 5/5
-#              shell:  source ~/.bashrc
+            - name: Install Go 1.14.4 - 5/5
+              shell:  source ~/.bashrc
+              args:
+                executable: /bin/bash
 
 #            - git: 
 #                repo: 'https://github.com/PrinzOwO/gtp5g.git'
