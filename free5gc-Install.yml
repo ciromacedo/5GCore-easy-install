@@ -17,59 +17,64 @@
                   - ansible_memtotal_mb >= 500
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
-            - name: Add Go 1.15 Apt Repository on PPA
-              shell:  yes '' | sudo add-apt-repository ppa:longsleep/golang-backports
-
-            - name: Upgrade all apt packages
-              apt: upgrade=dist force_apt_get=yes
-            
-            - name: Install Basic requirements
-              apt:
-                    name: ['mongodb', 'wget', 'git', 'ca-certificates', 'net-tools', 'gcc', 'cmake', 'autoconf', 'build-essential', 'libtool', 'pkg-config', 'libmnl-dev', 'libyaml-dev', 'golang-go']
-                    state: present
-                    update_cache: yes
-
-            - name: Start Mongo-DB
-              shell:  sudo systemctl start mongodb
-
-            - name: Remove Go-lang install
+            - name: If another version of Go 1/2
               shell:  sudo rm -rf /usr/local/go
               ignore_errors: true
 
-            - name: Remove GTP5G (if exists)
-              shell:  sudo rm -rf {{ GTP5G_DIR_INSTALL }}
+            - name: If another version of Go 2/2
+              shell:  apt remove golang-go
               ignore_errors: true
 
-            - name: Remove free5GC dir (if exists)
-              shell:  sudo rm -rf {{ FREE5GC_DIR_INSTALL }}
-              ignore_errors: true
+#            - name: Upgrade all apt packages
+#              apt: upgrade=dist force_apt_get=yes
+            
+#            - name: Install Basic requirements
+#              apt:
+#                    name: ['mongodb', 'wget', 'git', 'ca-certificates', 'net-tools', 'gcc', 'cmake', 'autoconf', 'build-essential', 'libtool', 'pkg-config', 'libmnl-dev', 'libyaml-dev', 'golang-go']
+#                    state: present
+#                    update_cache: yes
 
-            - git: 
-                repo: 'https://github.com/PrinzOwO/gtp5g.git'
-                dest: "{{ GTP5G_DIR_INSTALL }}"
-                version: v0.1.0
+#            - name: Start Mongo-DB
+#              shell:  sudo systemctl start mongodb
 
-            - name: Install linux-headers-5.0.0-23-generic
-              shell:  sudo apt-get install -y linux-headers-5.0.0-23-generic
+#            - name: Remove Go-lang install
+#              shell:  sudo rm -rf /usr/local/go
+#              ignore_errors: true
 
-            - name  : Run 'Make' into GTP5G
-              shell : make
-              args:
-                chdir: "{{ GTP5G_DIR_INSTALL }}"
+#            - name: Remove GTP5G (if exists)
+#              shell:  sudo rm -rf {{ GTP5G_DIR_INSTALL }}
+#              ignore_errors: true
 
-            - name  : Install GTP5G
-              shell : sudo make install
-              args:
-                chdir: "{{ GTP5G_DIR_INSTALL }}"
+#            - name: Remove free5GC dir (if exists)
+#              shell:  sudo rm -rf {{ FREE5GC_DIR_INSTALL }}
+#              ignore_errors: true
 
-            - name  : Network Setting 1/3
-              shell : sudo sysctl -w net.ipv4.ip_forward=1
+#            - git: 
+#                repo: 'https://github.com/PrinzOwO/gtp5g.git'
+#                dest: "{{ GTP5G_DIR_INSTALL }}"
+#                version: v0.1.0
 
-            - name  : Network Setting 2/3
-              shell : sudo iptables -t nat -A POSTROUTING -o {{ internet_network_interface }} -j MASQUERADE
+#            - name: Install linux-headers-5.0.0-23-generic
+#              shell:  sudo apt-get install -y linux-headers-5.0.0-23-generic
 
-            - name  : Network Setting 3/3
-              shell : sudo systemctl stop ufw
+#            - name  : Run 'Make' into GTP5G
+#              shell : make
+#              args:
+#                chdir: "{{ GTP5G_DIR_INSTALL }}"
+
+#            - name  : Install GTP5G
+#              shell : sudo make install
+#              args:
+#                chdir: "{{ GTP5G_DIR_INSTALL }}"
+
+#            - name  : Network Setting 1/3
+#              shell : sudo sysctl -w net.ipv4.ip_forward=1
+
+#            - name  : Network Setting 2/3
+#              shell : sudo iptables -t nat -A POSTROUTING -o {{ internet_network_interface }} -j MASQUERADE
+
+#            - name  : Network Setting 3/3
+#              shell : sudo systemctl stop ufw
 
 #            - git: 
 #                repo: 'https://github.com/my5G/my5Gcore.git'
