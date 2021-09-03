@@ -20,10 +20,11 @@ Clone this repository:
 git clone https://github.com/ciromacedo/5GCore-easy-install.git
 ```
 
-Install Ansible:
+Install Ansible and GOLang:
 ```
 sudo apt -y install ansible
-ansible-galaxy install fubarhouse.golang
+ansible-playbook -K install-golang.yml
+source ~/.bashrc
 ```
 
 Check your kernel version with ```uname -r```, if the result is less then ```5.0.0-23-generic``` run the following:
