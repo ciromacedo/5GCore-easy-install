@@ -1,7 +1,7 @@
 
-# my5GCore-easy-install
+# 5GCore-easy-install
 
-my5G-core is a fork of the free5GC project, with some extensions to facilitate the deployment. The main go od this project is automated the process of installation throught Ansible.
+The main objective of this project is to automate the installation process of [my5GCore](https://github.com/my5G/my5G-core) or [free5GC](https://github.com/free5gc/free5gc) projects, through Ansible.
 
 **Steps**
 
@@ -17,7 +17,7 @@ sudo apt -y install git
 
 Clone this repository:
 ```
-git clone https://github.com/ciromacedo/my5GCore-easy-install.git
+git clone https://github.com/ciromacedo/5GCore-easy-install.git
 ```
 
 Install Ansible:
@@ -42,6 +42,12 @@ Run ```ifconfig``` and get the name of **internet network interface**, like as i
 
 
 Run the following Ansible playbook (password for sudo is required):
+### my5G-Core
 ```
-cd my5GCore-easy-install && ansible-playbook -K my5GInstall.yml -e  "internet_network_interface=<< internet network interface name>>"
+cd 5GCore-easy-install && ansible-playbook -K my5GInstall.yml -e  "internet_network_interface=<< internet network interface name>>"
+```
+
+### free5gc
+```
+cd 5GCore-easy-install && ansible-playbook -K my5GInstall.yml -e  "internet_network_interface=<< internet network interface name>>"
 ```
