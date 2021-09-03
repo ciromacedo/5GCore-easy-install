@@ -105,12 +105,12 @@
                 insertafter: EOF
                 create: yes 
             
- #           - name: Install Go 1.14.4 - 5/5
- #             shell:  source ~/.bashrc
- #             args:
- #               executable: /bin/bash
- #             become: true
- #             become_user: root
+            - name: Install Go 1.14.4 - 5/5
+              shell:  source ~/.bashrc
+              args:
+                executable: /bin/bash
+              become: true
+              become_user: root
 
 #            - git: 
 #                repo: 'https://github.com/PrinzOwO/gtp5g.git'
