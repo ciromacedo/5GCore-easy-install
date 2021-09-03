@@ -49,5 +49,5 @@ cd 5GCore-easy-install && ansible-playbook -K my5GInstall.yml -e  "internet_netw
 
 ### free5gc
 ```
-cd free5gc-easy-install && ansible-playbook -K free5gcInstall.yml -e  "internet_network_interface=<< internet network interface name>>"
+cd free5gc-easy-install && ansible-playbook -K free5gc-Install.yml -e  "internet_network_interface=<< internet network interface name>>"
 ```
