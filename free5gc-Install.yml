@@ -9,6 +9,8 @@
             home_dir: "/root"
             file_owner: "root"
             GO_VERSION: "1.14.4"
+        roles:
+          - fubarhouse.golang
         tasks:
             - fail: 
                 msg: "'internet_network_interface' not found, this parameter is required!"
@@ -71,8 +73,13 @@
               become: true
               become_user: root
 
-            - name: User-plane Supporting Packages
-              shell: go get -u github.com/sirupsen/logrus
+            go_get:
+            - name: sirupsen
+              url: github.com/sirupsen/logrus
+              modules: true
+
+#            - name: User-plane Supporting Packages
+#              shell: go get -u github.com/sirupsen/logrus
 
 #            - git: 
 #                repo: 'https://github.com/PrinzOwO/gtp5g.git'

@@ -23,6 +23,7 @@ git clone https://github.com/ciromacedo/5GCore-easy-install.git
 Install Ansible:
 ```
 sudo apt -y install ansible
+ansible-galaxy install fubarhouse.golang
 ```
 
 Check your kernel version with ```uname -r```, if the result is less then ```5.0.0-23-generic``` run the following:
@@ -49,5 +50,5 @@ cd 5GCore-easy-install && ansible-playbook -K my5GInstall.yml -e  "internet_netw
 
 ### free5gc
 ```
-cd free5gc-easy-install && ansible-playbook -K free5gc-Install.yml -e  "internet_network_interface=<< internet network interface name>>"
+cd 5GCore-easy-install && ansible-playbook -K free5gc-Install.yml -e  "internet_network_interface=<< internet network interface name>>"
 ```
