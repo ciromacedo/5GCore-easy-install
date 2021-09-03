@@ -14,7 +14,7 @@
             - name: Environment validation!
               assert:
                 that:
-                  - ansible_memtotal_mb >= 3500
+                  - ansible_memtotal_mb >= 500
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
             - name: Add Go 1.15 Apt Repository on PPA
