@@ -48,65 +48,65 @@
               shell:  sudo rm -rf {{ FREE5GC_DIR_INSTALL }}
               ignore_errors: true
 
-#            - name: Install Go 1.14.4 - 1/5
-#              shell:  wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
+            - name: Install Go 1.14.4 - 1/5
+              shell:  wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
 
-#            - name: Install Go 1.14.4 - 2/5
-#              shell:  sudo tar -C /usr/local -zxvf go1.14.4.linux-amd64.tar.gz
+            - name: Install Go 1.14.4 - 2/5
+              shell:  sudo tar -C /usr/local -zxvf go1.14.4.linux-amd64.tar.gz
 
-#            - name: Install Go 1.14.4 - 3/5
-#              shell:  mkdir -p ~/go/{bin,pkg,src}
+            - name: Install Go 1.14.4 - 3/5
+              shell:  mkdir -p ~/go/{bin,pkg,src}
 
-#            - name: Install Go 1.14.4 - 4/5
-#              shell:  |
-#                    echo 'export GOPATH=$HOME/go' >> ~/.bashrc
-#                    echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
-#                    echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
-#                    echo 'export GO111MODULE=auto' >> ~/.bashrc
+            - name: Install Go 1.14.4 - 4/5
+              shell:  |
+                    echo 'export GOPATH=$HOME/go' >> ~/.bashrc
+                    echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
+                    echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
+                    echo 'export GO111MODULE=auto' >> ~/.bashrc
 
-            - name: download golang tar 
-              get_url:
-                url: "https://storage.googleapis.com/golang/go{{GO_VERSION}}.linux-amd64.tar.gz"
-                dest: "{{home_dir}}"
-                mode: 0440
+#            - name: download golang tar 
+#              get_url:
+#                url: "https://storage.googleapis.com/golang/go{{GO_VERSION}}.linux-amd64.tar.gz"
+#                dest: "{{home_dir}}"
+#                mode: 0440
                 
-            - name: Remove old installation of Go
-              file:
-                path: /usr/local/go
-                state: absent
-              become: yes
+#            - name: Remove old installation of Go
+#              file:
+#                path: /usr/local/go
+#                state: absent
+#              become: yes
             
-            - name: Extract the Go tarball
-              unarchive:
-                src: "{{home_dir}}/go{{GO_VERSION}}.linux-amd64.tar.gz"
-                dest: /usr/local
-                copy: no
-              become: yes
+#            - name: Extract the Go tarball
+#              unarchive:
+#                src: "{{home_dir}}/go{{GO_VERSION}}.linux-amd64.tar.gz"
+#                dest: /usr/local
+#                copy: no
+#              become: yes
             
-            - name: create go directories in home
-              file:
-                path: "{{item}}"
-                state: directory
-                owner: "{{file_owner}}"
-                group: "{{file_owner}}"
-                mode: 0775
-              with_items:
-                - "{{home_dir}}/go"
-                - "{{home_dir}}/go/bin"
+#            - name: create go directories in home
+#              file:
+#                path: "{{item}}"
+#                state: directory
+#                owner: "{{file_owner}}"
+#                group: "{{file_owner}}"
+#                mode: 0775
+#              with_items:
+#                - "{{home_dir}}/go"
+#                - "{{home_dir}}/go/bin"
                 
-            - name: modify .bashrc
-              blockinfile:
-                dest: "{{home_dir}}/.bashrc"
-                block: |
-                  export GOPATH=$HOME/go
-                  export GOBIN=$GOPATH/bin
-                  export PATH=$GOBIN:$PATH:/usr/local/go/bin
-                marker: '# {mark} ANSIBLE MANAGED BLOCK - changes for golang'
-                insertafter: EOF
-                create: yes 
+#            - name: modify .bashrc
+#              blockinfile:
+#                dest: "{{home_dir}}/.bashrc"
+#                block: |
+#                  export GOPATH=$HOME/go
+#                  export GOBIN=$GOPATH/bin
+#                  export PATH=$GOBIN:$PATH:/usr/local/go/bin
+#                marker: '# {mark} ANSIBLE MANAGED BLOCK - changes for golang'
+#                insertafter: EOF
+#                create: yes 
             
             - name: Install Go 1.14.4 - 5/5
-              shell:  source ~/.profile
+              shell:  source ~/.bashrc
               args:
                 executable: /bin/bash
               become: true
