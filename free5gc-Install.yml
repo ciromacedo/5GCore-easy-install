@@ -73,10 +73,10 @@
               become: true
               become_user: root
 
-            go_get:
-            - name: sirupsen
-              url: github.com/sirupsen/logrus
-              modules: true
+            - go_get:
+              - name: sirupsen
+                url: github.com/sirupsen/logrus
+                modules: true
 
 #            - name: User-plane Supporting Packages
 #              shell: go get -u github.com/sirupsen/logrus
