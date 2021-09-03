@@ -17,37 +17,50 @@
                   - ansible_memtotal_mb >= 500
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
-            - name: If another version of Go 1/2
+            - name: Upgrade all apt packages
+              apt: upgrade=dist force_apt_get=yes
+            
+            - name: Install Basic requirements
+              apt:
+                    name: ['mongodb', 'wget', 'git', 'ca-certificates', 'net-tools', 'gcc', 'cmake', 'autoconf', 'build-essential', 'libtool', 'pkg-config', 'libmnl-dev', 'libyaml-dev']
+                    state: present
+                    update_cache: yes
+
+            - name: Start Mongo-DB
+              shell:  sudo systemctl start mongodb
+
+            - name: Remove Go-lang install 1/2
               shell:  sudo rm -rf /usr/local/go
               ignore_errors: true
 
-            - name: If another version of Go 2/2
+            - name: Remove Go-lang install 1/2
               shell:  apt remove golang-go
               ignore_errors: true
 
-#            - name: Upgrade all apt packages
-#              apt: upgrade=dist force_apt_get=yes
-            
-#            - name: Install Basic requirements
-#              apt:
-#                    name: ['mongodb', 'wget', 'git', 'ca-certificates', 'net-tools', 'gcc', 'cmake', 'autoconf', 'build-essential', 'libtool', 'pkg-config', 'libmnl-dev', 'libyaml-dev', 'golang-go']
-#                    state: present
-#                    update_cache: yes
+            - name: Remove GTP5G (if exists)
+              shell:  sudo rm -rf {{ GTP5G_DIR_INSTALL }}
+              ignore_errors: true
 
-#            - name: Start Mongo-DB
-#              shell:  sudo systemctl start mongodb
+            - name: Remove free5GC dir (if exists)
+              shell:  sudo rm -rf {{ FREE5GC_DIR_INSTALL }}
+              ignore_errors: true
 
-#            - name: Remove Go-lang install
-#              shell:  sudo rm -rf /usr/local/go
-#              ignore_errors: true
+            - name: Install Go 1.14.4 - 1/4
+              shell:  wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
 
-#            - name: Remove GTP5G (if exists)
-#              shell:  sudo rm -rf {{ GTP5G_DIR_INSTALL }}
-#              ignore_errors: true
+            - name: Install Go 1.14.4 - 2/4
+              shell:  sudo tar -C /usr/local -zxvf go1.14.4.linux-amd64.tar.gz
 
-#            - name: Remove free5GC dir (if exists)
-#              shell:  sudo rm -rf {{ FREE5GC_DIR_INSTALL }}
-#              ignore_errors: true
+            - name: Install Go 1.14.4 - 3/4
+              shell:  mkdir -p ~/go/{bin,pkg,src}
+
+            - name: Install Go 1.14.4 - 4/4
+              shell:  |
+                    echo 'export GOPATH=$HOME/go' >> ~/.bashrc
+                    echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
+                    echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
+                    echo 'export GO111MODULE=auto' >> ~/.bashrc
+                    source ~/.bashrc
 
 #            - git: 
 #                repo: 'https://github.com/PrinzOwO/gtp5g.git'
