@@ -9,8 +9,6 @@
             home_dir: "/root"
             file_owner: "root"
             GO_VERSION: "1.14.4"
-        roles:
-          - fubarhouse.golang
         tasks:
             - fail: 
                 msg: "'internet_network_interface' not found, this parameter is required!"
@@ -50,33 +48,39 @@
               shell:  sudo rm -rf {{ FREE5GC_DIR_INSTALL }}
               ignore_errors: true
 
-            - name: Install Go 1.14.4 - 1/5
-              shell:  wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
+            - name: Add Go 1.15 Apt Repository on PPA
+              shell:  yes '' | sudo add-apt-repository ppa:longsleep/golang-backports
 
-            - name: Install Go 1.14.4 - 2/5
-              shell:  sudo tar -C /usr/local -zxvf go1.14.4.linux-amd64.tar.gz
+            - name: Install Basic requirements
+              apt:
+                    name: ['golang-go']
+                    state: present
+                    update_cache: yes
 
-            - name: Install Go 1.14.4 - 3/5
-              shell:  mkdir -p ~/go/{bin,pkg,src}
 
-            - name: Install Go 1.14.4 - 4/5
-              shell:  |
-                    echo 'export GOPATH=$HOME/go' >> ~/.bashrc
-                    echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
-                    echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
-                    echo 'export GO111MODULE=auto' >> ~/.bashrc
+#            - name: Install Go 1.14.4 - 1/5
+#              shell:  wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
+
+#            - name: Install Go 1.14.4 - 2/5
+#              shell:  sudo tar -C /usr/local -zxvf go1.14.4.linux-amd64.tar.gz
+
+ #           - name: Install Go 1.14.4 - 3/5
+ #             shell:  mkdir -p ~/go/{bin,pkg,src}
+
+#            - name: Install Go 1.14.4 - 4/5
+#              shell:  |
+#                    echo 'export GOPATH=$HOME/go' >> ~/.bashrc
+#                    echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
+#                    echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
+#                    echo 'export GO111MODULE=auto' >> ~/.bashrc
             
-            - name: Install Go 1.14.4 - 5/5
-              shell:  source ~/.bashrc
-              args:
-                executable: /bin/bash
-              become: true
-              become_user: root
+#            - name: Install Go 1.14.4 - 5/5
+#              shell:  source ~/.bashrc
+#              args:
+#                executable: /bin/bash
+#              become: true
+#              become_user: root
 
-            - go_get:
-              - name: sirupsen
-                url: github.com/sirupsen/logrus
-                modules: true
 
 #            - name: User-plane Supporting Packages
 #              shell: go get -u github.com/sirupsen/logrus
