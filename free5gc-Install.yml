@@ -106,7 +106,7 @@
                 create: yes 
             
             - name: Install Go 1.14.4 - 5/5
-              shell:  source ~/.bashrc
+              shell:  source ~/.profile
               args:
                 executable: /bin/bash
               become: true
