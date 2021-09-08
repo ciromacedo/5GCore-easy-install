@@ -8,6 +8,7 @@
             FREE5GC_DIR_INSTALL : "/root/go/src/free5gc"
             UPF_DIR_CONFIG : "/root/go/src/free5gc/NFs/upf/build/config"
             WEB_CONSOLE_FRONTEND_DIR : "/root/go/src/free5gc/webconsole/frontend"
+            WEB_CONSOLE_BASE_DIR : "/root/go/src/free5gc/webconsole"
             NFS_DIR_CONFIG : "/root/go/src/free5gc/config"
             GO_SRC_DIR : "/root/go/src"
             home_dir: "/root"
@@ -28,6 +29,7 @@
             PCF_PORT: "29507"
             SMF_IP_ADDRESS: "127.0.0.1"
             SMF_PORT: "29502"
+            UPF_IP_ADDRESS: "127.0.0.1"
 
             
             
@@ -131,11 +133,11 @@
 
                     # The IP list of the N4 interface on this UPF (Can't set to 0.0.0.0)
                     pfcp:
-                      - addr: 127.0.0.8
+                      - addr: {{ UPF_IP_ADDRESS }}
                     # The IP list of the N3/N9 interfaces on this UPF
                     # If there are multiple connection, set addr to 0.0.0.0 or list all the addresses
                     gtpu:
-                      - addr: 127.0.0.8
+                      - addr: {{ UPF_IP_ADDRESS }}
                       # [optional] gtpu.name
                       # - name: upf.5gc.nctu.me
                       # [optional] gtpu.ifname
@@ -713,7 +715,7 @@
                   configuration:
                     amfName: AMF # the name of this AMF
                     ngapIpList:  # the IP list of N2 interfaces on this AMF
-                      - 127.0.0.1
+                      - {{ AMF_IP_ADDRESS }}
                     sbi: # Service-based interface information
                       scheme: http # the protocol for sbi (http or https)
                       registerIPv4: {{ AMF_IP_ADDRESS }} # IP used to register to NRF
@@ -1064,6 +1066,11 @@
                       debugLevel: info
                       ReportCaller: false
 
+            - name  : Checkout the WebConsole version v1.0.1 - required for free5gc version is v3.0.5
+              shell : git checkout v1.0.1
+              args:
+                chdir: "{{ WEB_CONSOLE_BASE_DIR }}"
+
             - name  : Remove webuicfg.yaml default file config
               shell : rm webuicfg.yaml
               args:
@@ -1087,9 +1094,9 @@
               args:
                 chdir: "{{ FREE5GC_DIR_INSTALL }}"
 
-            - name  : Webconsole frontend Install required packages
-              shell : yarn install
+            - name  : Buil WebConsole
+              shell : make webconsole
               args:
-                chdir: "{{ WEB_CONSOLE_FRONTEND_DIR }}"
+                chdir: "{{ FREE5GC_DIR_INSTALL }}"
 
 
