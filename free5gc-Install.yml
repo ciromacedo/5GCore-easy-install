@@ -11,8 +11,8 @@
             GO_SRC_DIR : "/root/go/src"
             home_dir: "/root"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
-            NRF_IP_ADDRESS: "127.0.0.10"
-            NRF_PORT: "8000"
+            NRF_IP_ADDRESS: "127.0.0.1"
+            NRF_PORT: "29510"
             
             
         tasks:
