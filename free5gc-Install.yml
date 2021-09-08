@@ -1095,8 +1095,16 @@
                 chdir: "{{ FREE5GC_DIR_INSTALL }}"
 
             - name  : Buil WebConsole
-              shell : make webconsole
+              shell :  |
+                    yarn install
+                    yarn build
+                    rm -rf ../public
+                    cp -R build ../public
               args:
-                chdir: "{{ FREE5GC_DIR_INSTALL }}"
+                chdir: "{{ WEB_CONSOLE_FRONTEND_DIR }}"
 
-
+            - name  : Buil WebConsole
+              shell :  |
+                    go build -o bin/webconsole server.go
+              args:
+                chdir: "{{ WEB_CONSOLE_BASE_DIR }}"
