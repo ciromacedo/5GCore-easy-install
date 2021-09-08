@@ -44,4 +44,6 @@
                     echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
                     echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
                     echo 'export GO111MODULE=auto' >> ~/.bashrc
-            
+
+            - name: Remove GO install file
+              shell:  rm -rf go1.14.4.linux-amd64.tar.gz

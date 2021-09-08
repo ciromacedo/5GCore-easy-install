@@ -7,23 +7,19 @@ The main objective of this project is to automate the installation process of [m
 
 Install python-minimal:
 ```
-sudo apt update && apt -y install python-minimal
+sudo apt update && apt -y install python-minimal && sudo apt -y install git && sudo apt -y install ansible
 ```
 
-Install git:
-```
-sudo apt -y install git
-```
 
 Clone this repository:
 ```
 git clone https://github.com/ciromacedo/5GCore-easy-install.git
 ```
 
-Install Ansible and GOLang:
+Install GOLang:
 ```
-sudo apt -y install ansible
-ansible-playbook -K install-golang.yml
+
+cd 5GCore-easy-install &&  ansible-playbook -K install-golang.yml
 source ~/.bashrc
 ```
 
