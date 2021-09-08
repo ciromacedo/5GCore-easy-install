@@ -61,6 +61,7 @@
               shell : sudo make install
               args:
                 chdir: "{{ GTP5G_DIR_INSTALL }}"
+              ignore_errors: true
 
             - name  : Network Setting 1/3
               shell : sudo sysctl -w net.ipv4.ip_forward=1
