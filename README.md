@@ -49,3 +49,8 @@ cd 5GCore-easy-install && ansible-playbook -K my5GInstall.yml -e  "internet_netw
 ```
 cd 5GCore-easy-install && ansible-playbook -K free5gc-Install.yml -e  "internet_network_interface=<< internet network interface name>>"
 ```
+
+### Start NFs Functions
+```
+NRF > UDR > UDM > AUSF > NSSF > AMF > PCF > UPF > SMF > N3IWF > NWDAF
+```
