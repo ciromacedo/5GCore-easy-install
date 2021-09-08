@@ -873,14 +873,14 @@
                               ipv6: 2001:4860:4860::8888
                             ueSubnet: 60.61.0.0/16 # should be CIDR type
                     pfcp: # the IP address of N4 interface on this SMF (PFCP)
-                      addr: {{ SMF_IP_ADDRESS }}
+                      addr: 127.0.0.1
                     userplane_information: # list of userplane information
                       up_nodes: # information of userplane node (AN or UPF)
                         gNB1: # the name of the node
                           type: AN # the type of the node (AN or UPF)
                         UPF:  # the name of the node
                           type: UPF # the type of the node (AN or UPF)
-                          node_id: 127.0.0.8 # the IP/FQDN of N4 interface on this UPF (PFCP)
+                          node_id: {{ UPF_IP_ADDRESS }} # the IP/FQDN of N4 interface on this UPF (PFCP)
                           sNssaiUpfInfos: # S-NSSAI information list for this UPF
                             - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
                                 sst: 1 # Slice/Service Type (uinteger, range: 0~255)
