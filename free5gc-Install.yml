@@ -6,6 +6,7 @@
         vars:
             GTP5G_DIR_INSTALL : "/root/gtp5g"
             FREE5GC_DIR_INSTALL : "/root/go/src/free5gc"
+            UPF_DIR_CONFIG : "/root/go/src/free5gc/NFs/upf/build/config"
             GO_SRC_DIR : "/root/go/src"
             home_dir: "/root"
             
@@ -77,15 +78,50 @@
               args:
                 chdir: "{{ GO_SRC_DIR }}"
 
+            - name  : Make UPF
+              shell : make upf
+              args:
+                chdir: "{{ FREE5GC_DIR_INSTALL }}"
 
-#            - name  : Clone my5GCore project
-#              shell : |
-#                    git submodule sync
-#                    git submodule update --init --jobs `nproc`
-#                    git submodule foreach git checkout master
-#                    git submodule foreach git pull --jobs `nproc`
-#              args:
-#                chdir: "{{ FREE5GC_DIR_INSTALL }}"
+            - name  : Remove UPF default file config
+              shell : rm upfcfg.yaml
+              args:
+                chdir: "{{ UPF_DIR_CONFIG }}"
+
+
+            - name  : Build upfcfg.yaml config file
+              copy:
+                dest: "{{ UPF_DIR_CONFIG }}/upfcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.0
+                    description: UPF configuration
+                  
+                  configuration:
+                    # the kind of log output
+                      # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                      # ReportCaller: enable the caller report or not, value: true or false
+                    debugLevel: info
+                    ReportCaller: false
+
+                    # The IP list of the N4 interface on this UPF (Can't set to 0.0.0.0)
+                    pfcp:
+                      - addr: 127.0.0.8
+                    # The IP list of the N3/N9 interfaces on this UPF
+                    # If there are multiple connection, set addr to 0.0.0.0 or list all the addresses
+                    gtpu:
+                      - addr: 127.0.0.8
+                      # [optional] gtpu.name
+                      # - name: upf.5gc.nctu.me
+                      # [optional] gtpu.ifname
+                      # - ifname: gtpif
+
+                    # The DNN list supported by UPF
+                    dnn_list:
+                      - dnn: internet # Data Network Name
+                        cidr: 60.60.0.0/99 # Classless Inter-Domain Routing for assigned IPv4 pool of UE
+                        # [optional] dnn_list[*].natifname
+                        # natifname: eth0
 
 
 #            - name  : my5GCore - Install dependent packages
