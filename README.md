@@ -52,5 +52,11 @@ cd 5GCore-easy-install && ansible-playbook -K free5gc-Install.yml -e  "internet_
 
 ### Start NFs Functions
 ```
-NRF > UDR > UDM > AUSF > NSSF > AMF > PCF > UPF > SMF > N3IWF > NWDAF
+NRF > UDR > UDM > AUSF > NSSF > AMF > PCF > UPF (sudo -E ./bin/free5gc-upfd) > SMF > N3IWF > NWDAF
 ```
+
+### Truques do Tester
+1 - remover um aquivo q fica em /root/tem chamad gnb.sock
+2 - as vezes tem q remover as interfaces de rede com esses comandos:
+    ip link set uetun1 down
+    ip link del uetun1
