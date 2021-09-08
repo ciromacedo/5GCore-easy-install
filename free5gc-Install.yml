@@ -5,10 +5,11 @@
         remote_user: root
         vars:
             GTP5G_DIR_INSTALL : "/root/gtp5g"
-            FREE5GC_DIR_INSTALL : "/root/free5gc"
+            FREE5GC_DIR_INSTALL : "/root/go/src/free5gc"
+            GO_SRC_DIR : "/root/go/src"
             home_dir: "/root"
-            file_owner: "root"
-            GO_VERSION: "1.14.4"
+            
+            
         tasks:
             - fail: 
                 msg: "'internet_network_interface' not found, this parameter is required!"
@@ -70,10 +71,11 @@
             - name  : Network Setting 3/3
               shell : sudo systemctl stop ufw
 
-#            - git: 
-#                repo: 'https://github.com/my5G/my5Gcore.git'
-#                dest: '{{ FREE5GC_DIR_INSTALL }}'
-#                version: master
+            - name  : Git Clone free5gc
+              shell : git clone --recursive -b v3.0.5 -j `nproc` https://github.com/free5gc/free5gc.git
+              args:
+                chdir: "{{ GO_SRC_DIR }}"
+
 
 #            - name  : Clone my5GCore project
 #              shell : |
