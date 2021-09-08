@@ -7,8 +7,12 @@
             GTP5G_DIR_INSTALL : "/root/gtp5g"
             FREE5GC_DIR_INSTALL : "/root/go/src/free5gc"
             UPF_DIR_CONFIG : "/root/go/src/free5gc/NFs/upf/build/config"
+            NFS_DIR_CONFIG : "/root/go/src/free5gc/NFs/config"
             GO_SRC_DIR : "/root/go/src"
             home_dir: "/root"
+            MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
+            NRF_IP_ADDRESS: "127.0.0.10"
+            NRF_PORT: "8000"
             
             
         tasks:
@@ -88,7 +92,6 @@
               args:
                 chdir: "{{ UPF_DIR_CONFIG }}"
 
-
             - name  : Build upfcfg.yaml config file
               copy:
                 dest: "{{ UPF_DIR_CONFIG }}/upfcfg.yaml"
@@ -119,9 +122,58 @@
                     # The DNN list supported by UPF
                     dnn_list:
                       - dnn: internet # Data Network Name
-                        cidr: 60.60.0.0/99 # Classless Inter-Domain Routing for assigned IPv4 pool of UE
+                        cidr: 60.60.0.0/24 # Classless Inter-Domain Routing for assigned IPv4 pool of UE
                         # [optional] dnn_list[*].natifname
                         # natifname: eth0
+
+            - name  : Remove NRF default file config
+              shell : rm nrfcfg.yaml
+              args:
+                chdir: "{{ NFS_DIR_CONFIG }}"
+
+            - name  : Build nrfcfg.yaml config file
+              copy:
+                dest: "{{ NFS_DIR_CONFIG }}/nrfcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.0
+                    description: NRF initial local configuration
+
+                  configuration:
+                    MongoDBName: free5gc # database name in MongoDB
+                    MongoDBUrl: {{ MONGO_URL_CONNECTION }} # a valid URL of the mongodb
+                    sbi: # Service-based interface information
+                      scheme: http # the protocol for sbi (http or https)
+                      registerIPv4: {{ NRF_IP_ADDRESS }} # IP used to serve NFs or register to another NRF
+                      bindingIPv4: {{ NRF_IP_ADDRESS }}  # IP used to bind the service
+                      port: {{ NRF_PORT }} # port used to bind the service
+                    DefaultPlmnId:
+                      mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+                      mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+                    serviceNameList: # the SBI services provided by this NRF, refer to TS 29.510
+                      - nnrf-nfm # Nnrf_NFManagement service
+                      - nnrf-disc # Nnrf_NFDiscovery service
+
+                  # the kind of log output
+                    # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                    # ReportCaller: enable the caller report or not, value: true or false
+                  logger:
+                    NRF:
+                      debugLevel: info
+                      ReportCaller: false
+                    PathUtil:
+                      debugLevel: info
+                      ReportCaller: false
+                    OpenApi:
+                      debugLevel: info
+                      ReportCaller: false
+                    MongoDBLibrary:
+                      debugLevel: info
+                      ReportCaller: false
+
+
+
+
 
 
 #            - name  : my5GCore - Install dependent packages
