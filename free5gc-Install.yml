@@ -1064,6 +1064,24 @@
                       debugLevel: info
                       ReportCaller: false
 
+            - name  : Remove webuicfg.yaml default file config
+              shell : rm webuicfg.yaml
+              args:
+                chdir: "{{ NFS_DIR_CONFIG }}"
+
+            - name  : Build webuicfg.yaml config file
+              copy:
+                dest: "{{ NFS_DIR_CONFIG }}/webuicfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.0
+                    description: WebUI initial local configuration
+
+                  configuration:
+                    mongodb: # the mongodb connected by this webui
+                      name: free5gc # name of the mongodb
+                      url: {{ MONGO_URL_CONNECTION }} # a valid URL of the mongodb
+
             - name  : Build all NFs freee5gc
               shell : make
               args:
