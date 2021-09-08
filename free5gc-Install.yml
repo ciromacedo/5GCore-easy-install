@@ -7,6 +7,7 @@
             GTP5G_DIR_INSTALL : "/root/gtp5g"
             FREE5GC_DIR_INSTALL : "/root/go/src/free5gc"
             UPF_DIR_CONFIG : "/root/go/src/free5gc/NFs/upf/build/config"
+            WEB_CONSOLE_FRONTEND_DIR : "/root/go/src/free5gc/webconsole/frontend"
             NFS_DIR_CONFIG : "/root/go/src/free5gc/config"
             GO_SRC_DIR : "/root/go/src"
             home_dir: "/root"
@@ -52,6 +53,12 @@
 
             - name: Start Mongo-DB
               shell:  sudo systemctl start mongodb
+
+            - name: WebConsole front-end
+              shell :  |
+                    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+                    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+                    sudo apt update && sudo apt install yarn
             
             - name: Remove GTP5G (if exists)
               shell:  sudo rm -rf {{ GTP5G_DIR_INSTALL }}
@@ -1061,3 +1068,10 @@
               shell : make
               args:
                 chdir: "{{ FREE5GC_DIR_INSTALL }}"
+
+            - name  : Webconsole frontend Install required packages
+              shell : yarn install
+              args:
+                chdir: "{{ WEB_CONSOLE_FRONTEND_DIR }}"
+
+
