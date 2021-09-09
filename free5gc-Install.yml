@@ -14,8 +14,7 @@
             home_dir: "/root"
             PREDEFINED_IP_ADDRESS: "false"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
-            NRF_DEFAULT_IP: "127.0.0.10"
-            NRF_IP_ADDRESS: ""
+            NRF_IP_ADDRESS: "127.0.0.10"
             NRF_PORT: "29510"
             UDR_IP_ADDRESS: ""
             UDR_PORT: "29504"
@@ -60,7 +59,6 @@
               when: PREDEFINED_IP_ADDRESS == 'false'
 
             - set_fact:
-                NRF_IP_ADDRESS: "{{ NRF_DEFAULT_IP }}"
                 UDR_IP_ADDRESS: "127.0.0.4"
                 UDM_IP_ADDRESS: "127.0.0.3"
                 AUSF_IP_ADDRESS: "127.0.0.9"
