@@ -55,9 +55,6 @@
                 UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               when: PREDEFINED_IP_ADDRESS == 'false'
 
-            - debug: 
-                msg: "nrf {{ NRF_IP_ADDRESS }}, host {{ ansible_default_ipv4.address }}"
-
             - name: Upgrade all apt packages
               apt: upgrade=dist force_apt_get=yes
             
