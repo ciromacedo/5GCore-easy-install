@@ -16,24 +16,21 @@
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
             NRF_IP_ADDRESS: "127.0.0.10"
             NRF_PORT: "29510"
-            UDR_IP_ADDRESS: ""
+            UDR_IP_ADDRESS: "127.0.0.4"
             UDR_PORT: "29504"
-            UDM_IP_ADDRESS: ""
+            UDM_IP_ADDRESS: "127.0.0.3"
             UDM_PORT: "29503"
-            AUSF_IP_ADDRESS: ""
+            AUSF_IP_ADDRESS: "127.0.0.9"
             AUSF_PORT: "29509"
-            NSSF_IP_ADDRESS: ""
+            NSSF_IP_ADDRESS: "127.0.0.31"
             NSSF_PORT: "29531"
-            AMF_IP_ADDRESS: ""
+            AMF_IP_ADDRESS: "127.0.0.18"
             AMF_PORT: "29518"
-            PCF_IP_ADDRESS: ""
+            PCF_IP_ADDRESS: "127.0.0.7"
             PCF_PORT: "29507"
-            SMF_IP_ADDRESS: ""
+            SMF_IP_ADDRESS: "127.0.0.2"
             SMF_PORT: "29502"
-            UPF_IP_ADDRESS: ""
-            HOST_IP_ADDRESS: ""
-
-            
+            UPF_IP_ADDRESS: "127.0.0.8"
             
         tasks:
             - fail: 
@@ -57,17 +54,6 @@
                 SMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
                 UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               when: PREDEFINED_IP_ADDRESS == 'false'
-
-            - set_fact:
-                UDR_IP_ADDRESS: "127.0.0.4"
-                UDM_IP_ADDRESS: "127.0.0.3"
-                AUSF_IP_ADDRESS: "127.0.0.9"
-                NSSF_IP_ADDRESS: "127.0.0.31"
-                AMF_IP_ADDRESS: "127.0.0.18"
-                PCF_IP_ADDRESS: "127.0.0.7"
-                SMF_IP_ADDRESS: "127.0.0.2"
-                UPF_IP_ADDRESS: "127.0.0.8"
-              when: PREDEFINED_IP_ADDRESS == 'true'
 
             - debug: 
                 msg: "nrf {{ NRF_IP_ADDRESS }}, host {{ ansible_default_ipv4.address }}, HOST_IP_ADDRESS {{ HOST_IP_ADDRESS }}"
