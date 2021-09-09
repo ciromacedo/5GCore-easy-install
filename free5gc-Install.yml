@@ -14,23 +14,23 @@
             home_dir: "/root"
             PREDEFINED_IP_ADDRESS: "false"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
-            NRF_IP_ADDRESS: "127.0.0.10"
+            NRF_IP_ADDRESS: ""
             NRF_PORT: "29510"
-            UDR_IP_ADDRESS: "127.0.0.4"
+            UDR_IP_ADDRESS: ""
             UDR_PORT: "29504"
-            UDM_IP_ADDRESS: "127.0.0.3"
+            UDM_IP_ADDRESS: ""
             UDM_PORT: "29503"
-            AUSF_IP_ADDRESS: "127.0.0.9"
+            AUSF_IP_ADDRESS: ""
             AUSF_PORT: "29509"
-            NSSF_IP_ADDRESS: "127.0.0.31"
+            NSSF_IP_ADDRESS: ""
             NSSF_PORT: "29531"
-            AMF_IP_ADDRESS: "127.0.0.18"
+            AMF_IP_ADDRESS: ""
             AMF_PORT: "29518"
-            PCF_IP_ADDRESS: "127.0.0.7"
+            PCF_IP_ADDRESS: ""
             PCF_PORT: "29507"
-            SMF_IP_ADDRESS: "127.0.0.2"
+            SMF_IP_ADDRESS: ""
             SMF_PORT: "29502"
-            UPF_IP_ADDRESS: "127.0.0.8"
+            UPF_IP_ADDRESS: ""
             HOST_IP_ADDRESS: ""
 
             
@@ -47,8 +47,7 @@
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
             - set_fact:
-              HOST_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              NRF_IP_ADDRESS: "{{ HOST_IP_ADDRESS }}"
+              NRF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               UDR_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               UDM_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               AUSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
@@ -59,10 +58,17 @@
               UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               when: PREDEFINED_IP_ADDRESS == 'false'
 
-            - debug: 
-                msg: "nrf {{ NRF_IP_ADDRESS }}, host {{ ansible_default_ipv4.address }}, HOST_IP_ADDRESS {{ HOST_IP_ADDRESS }}"
-
-            - debug: NRF_IP_ADDRESS=HOST_IP_ADDRESS
+            - set_fact:
+              NRF_IP_ADDRESS: "127.0.0.10"
+              UDR_IP_ADDRESS: "127.0.0.4"
+              UDM_IP_ADDRESS: "127.0.0.3"
+              AUSF_IP_ADDRESS: "127.0.0.9"
+              NSSF_IP_ADDRESS: "127.0.0.31"
+              AMF_IP_ADDRESS: "127.0.0.18"
+              PCF_IP_ADDRESS: "127.0.0.7"
+              SMF_IP_ADDRESS: "127.0.0.2"
+              UPF_IP_ADDRESS: "127.0.0.8"
+              when: PREDEFINED_IP_ADDRESS == 'true'
 
             - debug: 
                 msg: "nrf {{ NRF_IP_ADDRESS }}, host {{ ansible_default_ipv4.address }}, HOST_IP_ADDRESS {{ HOST_IP_ADDRESS }}"
