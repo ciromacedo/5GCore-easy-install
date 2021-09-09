@@ -12,25 +12,25 @@
             NFS_DIR_CONFIG : "/root/go/src/free5gc/config"
             GO_SRC_DIR : "/root/go/src"
             home_dir: "/root"
-            default_ipv4: "true"
+            PREDEFINED_IP_ADDRESS: "false"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
-            NRF_IP_ADDRESS: "137.184.102.218"
+            NRF_IP_ADDRESS: "127.0.0.10"
             NRF_PORT: "29510"
-            UDR_IP_ADDRESS: "127.0.0.1"
+            UDR_IP_ADDRESS: "127.0.0.4"
             UDR_PORT: "29504"
-            UDM_IP_ADDRESS: "127.0.0.1"
+            UDM_IP_ADDRESS: "127.0.0.3"
             UDM_PORT: "29503"
-            AUSF_IP_ADDRESS: "127.0.0.1"
+            AUSF_IP_ADDRESS: "127.0.0.9"
             AUSF_PORT: "29509"
-            NSSF_IP_ADDRESS: "137.184.102.218"
+            NSSF_IP_ADDRESS: "127.0.0.31"
             NSSF_PORT: "29531"
-            AMF_IP_ADDRESS: "137.184.102.218"
+            AMF_IP_ADDRESS: "127.0.0.18"
             AMF_PORT: "29518"
-            PCF_IP_ADDRESS: "137.184.102.218"
+            PCF_IP_ADDRESS: "127.0.0.7"
             PCF_PORT: "29507"
-            SMF_IP_ADDRESS: "137.184.102.218"
+            SMF_IP_ADDRESS: "127.0.0.2"
             SMF_PORT: "29502"
-            UPF_IP_ADDRESS: "127.0.0.1"
+            UPF_IP_ADDRESS: "127.0.0.8"
 
             
             
@@ -49,10 +49,16 @@
               NRF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
               UDR_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
               UDM_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
-              when: default_ipv4 == 'true'
+              AUSF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              NSSF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              AMF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              PCF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              SMF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              UPF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              when: PREDEFINED_IP_ADDRESS == 'false'
 
-            - debug: 
-                msg: " nrf ip {{ NRF_IP_ADDRESS }} , upf ip {{ UPF_IP_ADDRESS }} "
+            - debug: Upgrade all apt packages
+                msg: "{{ NRF_IP_ADDRESS }}"
 
             - name: Upgrade all apt packages
               apt: upgrade=dist force_apt_get=yes
