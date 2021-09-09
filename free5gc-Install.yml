@@ -51,7 +51,8 @@
               UDM_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
               when: default_ipv4 == 'true'
 
-            - debug: NRF_IP_ADDRESS=UPF_IP_ADDRESS
+            - debug: 
+                msg: " nrf ip {{ NRF_IP_ADDRESS }} , upf ip {{ UPF_IP_ADDRESS }} "
 
             - name: Upgrade all apt packages
               apt: upgrade=dist force_apt_get=yes
