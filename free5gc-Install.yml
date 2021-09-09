@@ -12,24 +12,25 @@
             NFS_DIR_CONFIG : "/root/go/src/free5gc/config"
             GO_SRC_DIR : "/root/go/src"
             home_dir: "/root"
+            default_ipv4: "true"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
-            NRF_IP_ADDRESS: "157.230.232.80"
+            NRF_IP_ADDRESS: "137.184.102.218"
             NRF_PORT: "29510"
-            UDR_IP_ADDRESS: "157.230.232.80"
+            UDR_IP_ADDRESS: "137.184.102.218"
             UDR_PORT: "29504"
-            UDM_IP_ADDRESS: "157.230.232.80"
+            UDM_IP_ADDRESS: "137.184.102.218"
             UDM_PORT: "29503"
-            AUSF_IP_ADDRESS: "157.230.232.80"
+            AUSF_IP_ADDRESS: "137.184.102.218"
             AUSF_PORT: "29509"
-            NSSF_IP_ADDRESS: "157.230.232.80"
+            NSSF_IP_ADDRESS: "137.184.102.218"
             NSSF_PORT: "29531"
-            AMF_IP_ADDRESS: "157.230.232.80"
+            AMF_IP_ADDRESS: "137.184.102.218"
             AMF_PORT: "29518"
-            PCF_IP_ADDRESS: "157.230.232.80"
+            PCF_IP_ADDRESS: "137.184.102.218"
             PCF_PORT: "29507"
-            SMF_IP_ADDRESS: "157.230.232.80"
+            SMF_IP_ADDRESS: "137.184.102.218"
             SMF_PORT: "29502"
-            UPF_IP_ADDRESS: "157.230.232.80"
+            UPF_IP_ADDRESS: "137.184.102.218"
 
             
             
@@ -44,6 +45,10 @@
                   - ansible_memtotal_mb >= 500
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
+            - set_fact:
+              NRF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              when: default_ipv4 == 'true'
+
             - name: Upgrade all apt packages
               apt: upgrade=dist force_apt_get=yes
             
