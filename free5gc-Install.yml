@@ -46,19 +46,25 @@
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
             - set_fact:
-              NRF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
-              UDR_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
-              UDM_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
-              AUSF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
-              NSSF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
-              AMF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
-              PCF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
-              SMF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
-              UPF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              HOST_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              NRF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              UDR_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              UDM_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              AUSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              NSSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              AMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              PCF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              SMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               when: PREDEFINED_IP_ADDRESS == 'false'
 
             - debug: 
-                msg: "{{ NRF_IP_ADDRESS }}"
+                msg: "nrf {{ NRF_IP_ADDRESS }}, host {{ ansible_default_ipv4.address }}, HOST_IP_ADDRESS {{ HOST_IP_ADDRESS }}"
+
+            - debug: NRF_IP_ADDRESS=HOST_IP_ADDRESS
+
+             - debug: 
+                msg: "nrf {{ NRF_IP_ADDRESS }}, host {{ ansible_default_ipv4.address }}, HOST_IP_ADDRESS {{ HOST_IP_ADDRESS }}"
 
             - name: Upgrade all apt packages
               apt: upgrade=dist force_apt_get=yes
