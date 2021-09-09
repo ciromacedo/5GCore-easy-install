@@ -16,11 +16,11 @@
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
             NRF_IP_ADDRESS: "137.184.102.218"
             NRF_PORT: "29510"
-            UDR_IP_ADDRESS: "137.184.102.218"
+            UDR_IP_ADDRESS: "127.0.0.1"
             UDR_PORT: "29504"
-            UDM_IP_ADDRESS: "137.184.102.218"
+            UDM_IP_ADDRESS: "127.0.0.1"
             UDM_PORT: "29503"
-            AUSF_IP_ADDRESS: "137.184.102.218"
+            AUSF_IP_ADDRESS: "127.0.0.1"
             AUSF_PORT: "29509"
             NSSF_IP_ADDRESS: "137.184.102.218"
             NSSF_PORT: "29531"
@@ -47,7 +47,11 @@
     
             - set_fact:
               NRF_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              UDR_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
+              UDM_IP_ADDRESS: "{{ansible_default_ipv4.address}}"
               when: default_ipv4 == 'true'
+
+            - debug: NRF_IP_ADDRESS=UPF_IP_ADDRESS
 
             - name: Upgrade all apt packages
               apt: upgrade=dist force_apt_get=yes
