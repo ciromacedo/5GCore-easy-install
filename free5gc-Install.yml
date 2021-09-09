@@ -30,7 +30,7 @@
             PCF_PORT: "29507"
             SMF_IP_ADDRESS: "137.184.102.218"
             SMF_PORT: "29502"
-            UPF_IP_ADDRESS: "137.184.102.218"
+            UPF_IP_ADDRESS: "127.0.0.1"
 
             
             
