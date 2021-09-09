@@ -62,10 +62,10 @@
             - debug: 
                 msg: "nrf {{ NRF_IP_ADDRESS }}, host {{ ansible_default_ipv4.address }}, HOST_IP_ADDRESS {{ HOST_IP_ADDRESS }}"
 
-            - debug: VAR_TESTE=HOST_IP_ADDRESS
+            - debug: NRF_IP_ADDRESS=HOST_IP_ADDRESS
 
             - debug: 
-                msg: "var teste {{ VAR_TESTE }}, nrf {{ NRF_IP_ADDRESS }}, host {{ ansible_default_ipv4.address }}, HOST_IP_ADDRESS {{ HOST_IP_ADDRESS }}"
+                msg: "nrf {{ NRF_IP_ADDRESS }}, host {{ ansible_default_ipv4.address }}, HOST_IP_ADDRESS {{ HOST_IP_ADDRESS }}"
 
             - name: Upgrade all apt packages
               apt: upgrade=dist force_apt_get=yes
