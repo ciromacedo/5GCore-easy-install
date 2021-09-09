@@ -48,27 +48,27 @@
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
             - set_fact:
-              NRF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              UDR_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              UDM_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              AUSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              NSSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              AMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              PCF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              SMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                NRF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                UDR_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                UDM_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                AUSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                NSSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                AMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                PCF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                SMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               when: PREDEFINED_IP_ADDRESS == 'false'
 
             - set_fact:
-              NRF_IP_ADDRESS: "{{ NRF_DEFAULT_IP }}"
-              UDR_IP_ADDRESS: "127.0.0.4"
-              UDM_IP_ADDRESS: "127.0.0.3"
-              AUSF_IP_ADDRESS: "127.0.0.9"
-              NSSF_IP_ADDRESS: "127.0.0.31"
-              AMF_IP_ADDRESS: "127.0.0.18"
-              PCF_IP_ADDRESS: "127.0.0.7"
-              SMF_IP_ADDRESS: "127.0.0.2"
-              UPF_IP_ADDRESS: "127.0.0.8"
+                NRF_IP_ADDRESS: "{{ NRF_DEFAULT_IP }}"
+                UDR_IP_ADDRESS: "127.0.0.4"
+                UDM_IP_ADDRESS: "127.0.0.3"
+                AUSF_IP_ADDRESS: "127.0.0.9"
+                NSSF_IP_ADDRESS: "127.0.0.31"
+                AMF_IP_ADDRESS: "127.0.0.18"
+                PCF_IP_ADDRESS: "127.0.0.7"
+                SMF_IP_ADDRESS: "127.0.0.2"
+                UPF_IP_ADDRESS: "127.0.0.8"
               when: PREDEFINED_IP_ADDRESS == 'true'
 
             - debug: 
