@@ -48,7 +48,7 @@
     
             - set_fact:
               HOST_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-              NRF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+              NRF_IP_ADDRESS: "{{ HOST_IP_ADDRESS }}"
               UDR_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               UDM_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               AUSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
