@@ -11,7 +11,7 @@
             WEB_CONSOLE_BASE_DIR : "/root/go/src/free5gc/webconsole"
             NFS_DIR_CONFIG : "/root/go/src/free5gc/config"
             GO_SRC_DIR : "/root/go/src"
-            home_dir: "/root"
+            HOME_DIR: "/root"
             PREDEFINED_IP_ADDRESS: "false"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
             NRF_IP_ADDRESS: "127.0.0.10"
@@ -90,10 +90,10 @@
             - name: User-plane Supporting Packages
               shell: go get -u github.com/sirupsen/logrus
 
-            - name  : Install GTP5
+            - name  : Git Clone GTP5
               shell : git clone -b v0.2.1 https://github.com/free5gc/gtp5g.git
               args:
-                chdir: "{{ GTP5G_DIR_INSTALL }}"
+                chdir: "{{ HOME_DIR }}"
 
             - name: Install linux-headers-5.0.0-23-generic
               shell: sudo apt-get install -y linux-headers-5.0.0-23-generic
