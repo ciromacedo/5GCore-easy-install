@@ -109,16 +109,19 @@
                 chdir: "{{ GTP5G_DIR_INSTALL }}"
               ignore_errors: true
 
-            - name  : Network Setting 1/4
+            - name  : Network Setting 1/5
               shell : sudo sysctl -w net.ipv4.ip_forward=1
 
-            - name  : Network Setting 2/4
+            - name  : Network Setting 2/5
               shell : sudo iptables -t nat -A POSTROUTING -o {{ internet_network_interface }} -j MASQUERADE
+            
+            - name  : Network Setting 3/5
+              shell : sudo iptables -A FORWARD -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1400
 
-            - name  : Network Setting 3/4
+            - name  : Network Setting 4/5
               shell : sudo systemctl stop ufw
 
-            - name  : Network Setting 4/4
+            - name  : Network Setting 5/5
               shell : sudo systemctl disable ufw
 
             - name  : Git Clone free5gc
