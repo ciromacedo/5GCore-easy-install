@@ -90,14 +90,14 @@
             - name: User-plane Supporting Packages
               shell: go get -u github.com/sirupsen/logrus
 
-            - git: 
-                repo: 'https://github.com/PrinzOwO/gtp5g.git'
-                dest: "{{ GTP5G_DIR_INSTALL }}"
-                version: v0.1.0
+            - name  : Install GTP5
+              shell : git clone -b v0.2.1 https://github.com/free5gc/gtp5g.git
+              args:
+                chdir: "{{ GTP5G_DIR_INSTALL }}"
 
             - name: Install linux-headers-5.0.0-23-generic
               shell: sudo apt-get install -y linux-headers-5.0.0-23-generic
-
+                     
             - name  : Run 'Make' into GTP5G
               shell : make
               args:
