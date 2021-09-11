@@ -33,6 +33,11 @@ In the action menu that appears, choose the first option "__install the package 
     <img src="imagens/kerner-5-0-23.jpeg" height="300"/> 
 </p>
 
+Run
+```
+apt install linux-headers-5.0.0-23-generic
+```
+
 Run ```ifconfig``` and get the name of **internet network interface**, like as illustrated in the figure below:
 <p align="center">
     <img src="imagens/if_config.png"/> 
@@ -52,8 +57,54 @@ cd 5GCore-easy-install && ansible-playbook -K free5gc-Install.yml -e  "internet_
 
 ### Start NFs Functions
 ```
-NRF > UDR > UDM > AUSF > NSSF > AMF > PCF > UPF (sudo -E ./bin/free5gc-upfd) > SMF > N3IWF > NWDAF
+NRF > UDR > UDM > AUSF > NSSF > AMF > PCF > UPF (sudo -E ./bin/free5gc-upfd) > SMF > SERVER-WEB > SERVER-FRONT-END (REACT_APP_HTTP_API_URL=http://ipaddress:5000/api PORT=3000 yarn start)
 ```
+
+## Instalação / Configuração do Tester
+
+1 - Instalar GO (Usar 5GEasyInstall)
+
+2 - Clonar o repositório
+```
+git clone https://github.com/my5G/my5G-RANTester.git
+```
+
+3 - Instalar as dependencias
+```
+cd my5G-RANTester && go mod download
+```
+
+
+3 - Gerar os binários
+```
+cd cmd && go build app.go
+```
+
+4 - Editar o arquivo de configuração ** config/config.yml**
+4.1 - Setar o IP para conexão com AMF:
+``
+amfif:
+  ip: "127.0.0.1"
+  port: 38412
+  name: "free5gc"
+``
+
+4.2 COnfigurar os parametros de acesso do UE
+``
+key: "8baf473f2f8fd09487cccbd7097c6862"
+  opc: "8e27b6af0e692e750f32667a3b14605d"
+  amf: "8000"
+``
+
+5 Após registrar o UE no Core a inicialização de um UE simples pode ser feita dentro da pasta **cmd** com:
+``
+./app ue
+``
+6 Se tudo estiver OK será gerada uma interface de rede com nome **uetun1** e um PING pode ser realizado com:
+``
+ ping google.com -I uetun1
+``
+
 
 ### Truques do Tester
 1 - remover um aquivo q fica em /root/tem chamad gnb.sock

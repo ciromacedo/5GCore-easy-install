@@ -15,22 +15,25 @@
             PREDEFINED_IP_ADDRESS: "false"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
             NRF_IP_ADDRESS: "127.0.0.10"
-            NRF_PORT: "29510"
+            NRF_PORT: "8000"
             UDR_IP_ADDRESS: "127.0.0.4"
-            UDR_PORT: "29504"
+            UDR_PORT: "8000"
             UDM_IP_ADDRESS: "127.0.0.3"
-            UDM_PORT: "29503"
+            UDM_PORT: "8000"
             AUSF_IP_ADDRESS: "127.0.0.9"
-            AUSF_PORT: "29509"
+            AUSF_PORT: "8000"
             NSSF_IP_ADDRESS: "127.0.0.31"
-            NSSF_PORT: "29531"
+            NSSF_PORT: "8000"
+            AMF_NGAP_IP_ADDRESS: "127.0.0.1"
             AMF_IP_ADDRESS: "127.0.0.18"
-            AMF_PORT: "29518"
+            AMF_PORT: "8000"
             PCF_IP_ADDRESS: "127.0.0.7"
-            PCF_PORT: "29507"
+            PCF_PORT: "8000"
+            SMF_N3_INTERFACE_IP_ADDRESS: "127.0.0.1"
             SMF_IP_ADDRESS: "127.0.0.2"
-            SMF_PORT: "29502"
+            SMF_PORT: "8000"
             UPF_IP_ADDRESS: "127.0.0.8"
+            GTPU_UPF_IP_ADDRESS: "127.0.0.8"
             
         tasks:
             - fail: 
@@ -44,15 +47,18 @@
                 msg: "Minimum memory requirements in the deployment environment is 4GB! Operation failed!"
     
             - set_fact:
-                NRF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-                UDR_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-                UDM_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-                AUSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-                NSSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-                AMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-                PCF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-                SMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-                UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                AMF_NGAP_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                SMF_N3_INTERFACE_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                GTPU_UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+#                NRF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+#                UDR_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+#                UDM_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+#                AUSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+#                NSSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+#                AMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+#                PCF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+#                SMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+#                UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               when: PREDEFINED_IP_ADDRESS == 'false'
 
             - name: Upgrade all apt packages
@@ -114,17 +120,11 @@
 
             - name  : Network Setting 4/4
               shell : sudo systemctl disable ufw
-              
 
             - name  : Git Clone free5gc
               shell : git clone --recursive -b v3.0.5 -j `nproc` https://github.com/free5gc/free5gc.git
               args:
                 chdir: "{{ GO_SRC_DIR }}"
-
-#            - name  : Make UPF
-#              shell : make upf
-#              args:
-#                chdir: "{{ FREE5GC_DIR_INSTALL }}"
 
             - name  : Remove nrfcfg.yaml default file config
               shell : rm nrfcfg.yaml
@@ -691,7 +691,7 @@
                   configuration:
                     amfName: AMF # the name of this AMF
                     ngapIpList:  # the IP list of N2 interfaces on this AMF
-                      - {{ AMF_IP_ADDRESS }}
+                      - {{ AMF_NGAP_IP_ADDRESS }}
                     sbi: # Service-based interface information
                       scheme: http # the protocol for sbi (http or https)
                       registerIPv4: {{ AMF_IP_ADDRESS }} # IP used to register to NRF
@@ -895,7 +895,7 @@
                           type: AN # the type of the node (AN or UPF)
                         UPF:  # the name of the node
                           type: UPF # the type of the node (AN or UPF)
-                          node_id: 127.0.0.8 # the IP/FQDN of N4 interface on this UPF (PFCP)
+                          node_id: {{ UPF_IP_ADDRESS }} # the IP/FQDN of N4 interface on this UPF (PFCP)
                           sNssaiUpfInfos: # S-NSSAI information list for this UPF
                             - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
                                 sst: 1 # Slice/Service Type (uinteger, range: 0~255)
@@ -910,7 +910,7 @@
                           interfaces: # Interface list for this UPF
                             - interfaceType: N3 # the type of the interface (N3 or N9)
                               endpoints: # the IP address of this N3/N9 interface on this UPF
-                                - {{ SMF_IP_ADDRESS }}
+                                - {{ SMF_N3_INTERFACE_IP_ADDRESS }}
                               networkInstance: internet # Data Network Name (DNN)
                       links: # the topology graph of userplane, A and B represent the two nodes of each link
                         - A: gNB1
@@ -1111,7 +1111,7 @@
                     # The IP list of the N3/N9 interfaces on this UPF
                     # If there are multiple connection, set addr to 0.0.0.0 or list all the addresses
                     gtpu:
-                      - addr: {{ UPF_IP_ADDRESS }}
+                      - addr: {{ GTPU_UPF_IP_ADDRESS }}
                       # [optional] gtpu.name
                       # - name: upf.5gc.nctu.me
                       # [optional] gtpu.ifname
