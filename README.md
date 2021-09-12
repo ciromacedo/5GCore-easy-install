@@ -111,3 +111,19 @@ key: "8baf473f2f8fd09487cccbd7097c6862"
 2 - as vezes tem q remover as interfaces de rede com esses comandos:
     ip link set uetun1 down
     ip link del uetun1
+
+3 para verificar se o ping está realmente funcionando usar o seguinte comando:
+    tshark - i <<interface-rede>>   --> o wireshark vai capturar os pacotes da interface
+    ip r --> mostra as rotas e mostra tambem que qualquer pacote que chegar na máquina vai p/ a eth0 que é a default.
+    
+    ip route add 8.8.8.8 via 60.60.60.0.1 dev uetun1  --> cria uma rota de modo que todo pacote que chega com destino 8.8 é encaminhado p/ a interface ETUN1 ao invés de ir p/ o ETH0.
+
+     --> deleta a rota anterior
+
+    Para que o PING com 'nomedosite.com' funcione, basta descobrir o IP do site alvo a adicionar uma rota com o seguinte comando:
+    ip route add <colocar-o-ip-aqui> via 60.60.0.1 dev uetun1
+
+    Para remover uma rota adicionada com o comando anterior basta executar:
+    ip route del <colocar-o-ip-aqui> via 60.60.0.1 dev uetun1
+
+    
