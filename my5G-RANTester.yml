@@ -7,6 +7,7 @@
             MY5GC_RAN_TESTER_DIR_INSTALL : "/root/my5G-RANTester"
             MY5GC_RAN_TESTER_CONFIG_DIR : "/root/my5G-RANTester/config"
             MY5GC_RAN_TESTER_CMD_DIR : "/root/my5G-RANTester/cmd"
+            TMP_DIR : "/tmp"
         tasks:
             - fail: 
                 msg: "'core_network_ip' not found, this parameter is required!"
@@ -16,6 +17,20 @@
                 repo: 'https://github.com/my5G/my5G-RANTester.git'
                 dest: '{{ MY5GC_RAN_TESTER_DIR_INSTALL }}'
                 version: master
+
+            - name  : Remove uetun interfaces 1/2
+              shell :  ip link set uetun1 down
+              ignore_errors: true
+
+            - name  : Remove uetun interfaces 2/2
+              shell :  ip link del uetun1
+              ignore_errors: true
+
+            - name  : Remove gnb.sock
+              shell : rm gnb.sock
+              args:
+                chdir: "{{ TMP_DIR }}"
+              ignore_errors: true
 
             - name  : Go Mod Download
               shell : go mod download
