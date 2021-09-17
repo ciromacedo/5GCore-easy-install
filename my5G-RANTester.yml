@@ -29,13 +29,13 @@
 
 
             - name  : Remove default config file config
-              shell : rm config.yaml
+              shell : rm config.yml
               args:
                 chdir: "{{ MY5GC_RAN_TESTER_CONFIG_DIR }}"
                 
             - name  : Build config.yaml config file
               copy:
-                dest: "{{ MY5GC_RAN_TESTER_CONFIG_DIR }}/config.yaml"
+                dest: "{{ MY5GC_RAN_TESTER_CONFIG_DIR }}/config.yml"
                 content: |
                   gnodeb:
                     controlif:
