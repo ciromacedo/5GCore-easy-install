@@ -9,8 +9,8 @@
             MY5GC_RAN_TESTER_CMD_DIR : "/root/my5G-RANTester/cmd"
         tasks:
             - fail: 
-                msg: "'5gc_ip' not found, this parameter is required!"
-              when: 5gc_ip == ''
+                msg: "'core_network_ip' not found, this parameter is required!"
+              when: core_network_ip == ''
 
             - git: 
                 repo: 'https://github.com/my5G/my5G-RANTester.git'
