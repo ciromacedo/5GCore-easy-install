@@ -40,10 +40,6 @@ Run ```ifconfig``` and get the name of **internet network interface**, like as i
 
 
 Run the following Ansible playbook (password for sudo is required):
-### my5G-Core
-```
-cd 5GCore-easy-install && ansible-playbook -K my5GInstall.yml -e  "internet_network_interface=<< internet network interface name>>"
-```
 
 ### free5gc
 ```
@@ -52,7 +48,7 @@ cd 5GCore-easy-install && ansible-playbook -K free5gc-Install.yml -e  "internet_
 
 ### Start NFs Functions
 ```
-NRF > UDR > UDM > AUSF > NSSF > AMF > PCF > UPF (sudo -E ./bin/free5gc-upfd) > SMF > SERVER-WEB > SERVER-FRONT-END ( REACT_APP_HTTP_API_URL=http://ip_address:5000/api PORT=3000 yarn start )
+NRF > UDR > UDM > AUSF > NSSF > AMF > PCF > UPF (sudo -E ./bin/free5gc-upfd) > SMF > SERVER-WEB > SERVER-FRONT-END ( REACT_APP_HTTP_API_URL=http://165.232.139.208:5000/api PORT=3000 yarn start )
 ```
 
 ## Instalação / Configuração do Tester

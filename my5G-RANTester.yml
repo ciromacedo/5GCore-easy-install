@@ -1,0 +1,70 @@
+---
+    -   hosts: 127.0.0.1
+        connection: local
+        become: yes
+        remote_user: root
+        vars:
+            MY5GC_RAN_TESTER_DIR_INSTALL : "/root"
+            MY5GC_RAN_TESTER_CONFIG_DIR : "/root/my5G-RANTester/config"
+            MY5GC_RAN_TESTER_CMD_DIR : "/root/my5G-RANTester/cmd"
+        tasks:
+            - fail: 
+                msg: "'5gc_ip' not found, this parameter is required!"
+              when: 5gc_ip == ''
+
+            - git: 
+                repo: 'https://github.com/my5G/my5G-RANTester.git'
+                dest: '{{ MY5GC_RAN_TESTER_DIR_INSTALL }}'
+                version: master
+
+            - name  : Go Mod Download
+              shell : go mod download
+              args:
+                chdir: "{{ MY5GC_RAN_TESTER_DIR_INSTALL }}"
+
+            - name  : RanTester Build App
+              shell : go build app.go
+              args:
+                chdir: "{{ MY5GC_RAN_TESTER_CONFIG_DIR }}"
+
+
+            - name  : Remove default config file config
+              shell : rm config.yaml
+              args:
+                chdir: "{{ MY5GC_RAN_TESTER_CONFIG_DIR }}"
+                
+            - name  : Build config.yaml config file
+              copy:
+                dest: "{{ MY5GC_RAN_TESTER_CONFIG_DIR }}/config.yaml"
+                content: |
+                  gnodeb:
+                    controlif:
+                      ip: "{{ ansible_default_ipv4.address }}"
+                      port: 9487
+                    dataif:
+                      ip: "{{ ansible_default_ipv4.address }}"
+                      port: 2152
+                    plmnlist:
+                      mcc: "208"
+                      mnc: "93"
+                      tac: "000001"
+                      gnbid: "000002"
+                    slicesupportlist:
+                      sst: "01"
+                      sd: "010203"
+                  ue:
+                    msin: "0000000003"
+                    key: "8baf473f2f8fd09487cccbd7097c6862"
+                    opc: "8e27b6af0e692e750f32667a3b14605d"
+                    amf: "8000"
+                    sqn: "0000000"
+                    hplmn:
+                      mcc: "208"
+                      mnc: "93"
+                    snssai:
+                      sst: 1
+                      sd: "010203"
+                  amfif:
+                    ip: "165.232.139.208"
+                    port: 38412
+                    name: "free5gc"
