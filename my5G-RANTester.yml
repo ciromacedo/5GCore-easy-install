@@ -25,7 +25,7 @@
             - name  : RanTester Build App
               shell : go build app.go
               args:
-                chdir: "{{ MY5GC_RAN_TESTER_CONFIG_DIR }}"
+                chdir: "{{ MY5GC_RAN_TESTER_CMD_DIR }}"
 
 
             - name  : Remove default config file config
