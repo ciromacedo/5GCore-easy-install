@@ -4,7 +4,7 @@
         become: yes
         remote_user: root
         vars:
-            MY5GC_RAN_TESTER_DIR_INSTALL : "/root"
+            MY5GC_RAN_TESTER_DIR_INSTALL : "/root/my5G-RANTester"
             MY5GC_RAN_TESTER_CONFIG_DIR : "/root/my5G-RANTester/config"
             MY5GC_RAN_TESTER_CMD_DIR : "/root/my5G-RANTester/cmd"
         tasks:
