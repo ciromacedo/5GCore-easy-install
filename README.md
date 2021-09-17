@@ -33,11 +33,6 @@ In the action menu that appears, choose the first option "__install the package 
     <img src="imagens/kerner-5-0-23.jpeg" height="300"/> 
 </p>
 
-Run
-```
-apt install linux-headers-5.0.0-23-generic
-```
-
 Run ```ifconfig``` and get the name of **internet network interface**, like as illustrated in the figure below:
 <p align="center">
     <img src="imagens/if_config.png"/> 
@@ -57,16 +52,24 @@ cd 5GCore-easy-install && ansible-playbook -K free5gc-Install.yml -e  "internet_
 
 ### Start NFs Functions
 ```
-NRF > UDR > UDM > AUSF > NSSF > AMF > PCF > UPF (sudo -E ./bin/free5gc-upfd) > SMF > SERVER-WEB > SERVER-FRONT-END (REACT_APP_HTTP_API_URL=http://ipaddress:5000/api PORT=3000 yarn start)
+NRF > UDR > UDM > AUSF > NSSF > AMF > PCF > UPF (sudo -E ./bin/free5gc-upfd) > SMF > SERVER-WEB > SERVER-FRONT-END ( REACT_APP_HTTP_API_URL=http://ip_address:5000/api PORT=3000 yarn start )
 ```
 
 ## Instalação / Configuração do Tester
 
 1 - Instalar GO (Usar 5GEasyInstall)
 
-2 - Clonar o repositório
+2 - Clonar o repositório e instalar o GO
 ```
 git clone https://github.com/my5G/my5G-RANTester.git
+
+wget https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
+sudo tar -C /usr/local -zxvf go1.14.4.linux-amd64.tar.gz
+mkdir -p ~/go/{bin,pkg,src}
+echo 'export GOPATH=$HOME/go' >> ~/.bashrc
+echo 'export GOROOT=/usr/local/go' >> ~/.bashrc
+echo 'export PATH=$PATH:$GOPATH/bin:$GOROOT/bin' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 3 - Instalar as dependencias
