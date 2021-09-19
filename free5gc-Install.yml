@@ -12,6 +12,8 @@
             NFS_DIR_CONFIG : "/root/go/src/free5gc/config"
             GO_SRC_DIR : "/root/go/src"
             HOME_DIR: "/root"
+            FREE5GC_GIT_CHECKOUT_URL: "--recursive -b v3.0.5 -j `nproc` https://github.com/free5gc/free5gc.git"
+            FREE5GC_CHECKOUT_FOLDER_NAME: "free5gc"
             PREDEFINED_IP_ADDRESS: "false"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
             NRF_IP_ADDRESS: "127.0.0.10"
@@ -122,7 +124,7 @@
               shell : sudo systemctl stop ufw
 
             - name  : Git Clone free5gc
-              shell : git clone --recursive -b v3.0.5 -j `nproc` https://github.com/free5gc/free5gc.git
+              shell : git clone {{ FREE5GC_GIT_CHECKOUT_URL }} {{ FREE5GC_CHECKOUT_FOLDER_NAME }}
               args:
                 chdir: "{{ GO_SRC_DIR }}"
 
