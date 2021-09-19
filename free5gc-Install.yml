@@ -1073,7 +1073,7 @@
               args:
                 chdir: "{{ FREE5GC_DIR_INSTALL }}"
 
-            - name  : Buil WebConsole
+            - name  : BuilD WebConsole
               shell :  |
                     yarn install
                     yarn build
@@ -1082,7 +1082,7 @@
               args:
                 chdir: "{{ WEB_CONSOLE_FRONTEND_DIR }}"
 
-            - name  : Buil WebConsole
+            - name  : Build WebConsole
               shell :  |
                     go build -o bin/webconsole server.go
               args:
