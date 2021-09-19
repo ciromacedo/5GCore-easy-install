@@ -12,10 +12,11 @@
             NFS_DIR_CONFIG : "/root/go/src/free5gc/config"
             GO_SRC_DIR : "/root/go/src"
             HOME_DIR: "/root"
-#            FREE5GC_GIT_CHECKOUT_URL: "--recursive -b v3.0.5 -j `nproc` https://github.com/free5gc/free5gc.git"
-            FREE5GC_GIT_CHECKOUT_URL: "https://github.com/ciromacedo/free5gc-devmode.git"
+            FREE5GC_GIT_CHECKOUT_URL_FREEGC_TAG_VERSION: "--recursive -b v3.0.5 -j `nproc` https://github.com/free5gc/free5gc.git"
+            FREE5GC_GIT_CHECKOUT_URL_CIRO: "https://github.com/ciromacedo/free5gc-devmode.git"
             FREE5GC_CHECKOUT_FOLDER_NAME: "free5gc"
             PREDEFINED_IP_ADDRESS: "false"
+            FREE5GC: "false"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
             NRF_IP_ADDRESS: "127.0.0.10"
             NRF_PORT: "8000"
@@ -53,15 +54,6 @@
                 AMF_NGAP_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
                 SMF_N3_INTERFACE_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
                 GTPU_UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-#                NRF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-#                UDR_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-#                UDM_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-#                AUSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-#                NSSF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-#                AMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-#                PCF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-#                SMF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
-#                UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
               when: PREDEFINED_IP_ADDRESS == 'false'
 
             - name: Upgrade all apt packages
@@ -76,7 +68,7 @@
             - name: Start Mongo-DB
               shell:  sudo systemctl start mongodb
 
-            - name: WebConsole front-end
+            - name: Install WebConsole front-end dependencies
               shell :  |
                     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
                     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
@@ -124,10 +116,17 @@
             - name  : Network Setting 4/4
               shell : sudo systemctl stop ufw
 
-            - name  : Git Clone free5gc
-              shell : git clone {{ FREE5GC_GIT_CHECKOUT_URL }} {{ FREE5GC_CHECKOUT_FOLDER_NAME }}
+            - name  : Install by free5gc TAG Version
+              shell : git clone {{ FREE5GC_GIT_CHECKOUT_URL_FREEGC_TAG_VERSION }} {{ FREE5GC_CHECKOUT_FOLDER_NAME }}
               args:
                 chdir: "{{ GO_SRC_DIR }}"
+              when  : FREE5GC == 'true'
+
+            - name  : Install by ciromacedo Fork free5gc version
+              shell : git clone {{ FREE5GC_GIT_CHECKOUT_URL_CIRO }} {{ FREE5GC_CHECKOUT_FOLDER_NAME }}
+              args:
+                chdir: "{{ GO_SRC_DIR }}"
+              when  : FREE5GC == 'false'
 
             - name  : Remove nrfcfg.yaml default file config
               shell : rm nrfcfg.yaml
@@ -1049,6 +1048,7 @@
               shell : git checkout v1.0.1
               args:
                 chdir: "{{ WEB_CONSOLE_BASE_DIR }}"
+              when  : FREE5GC == 'true'
 
             - name  : Remove webuicfg.yaml default file config
               shell : rm webuicfg.yaml
@@ -1126,48 +1126,3 @@
                         cidr: 60.60.0.0/24 # Classless Inter-Domain Routing for assigned IPv4 pool of UE
                         # [optional] dnn_list[*].natifname
                         # natifname: eth0
-
-#            - name  : Remove run.sh default file
-#              shell : rm run.sh
-#              args:
-#                chdir: "{{ FREE5GC_DIR_INSTALL }}"
-
-#            - name  : Build run.sh 
-#              copy:
-#                dest: "{{ FREE5GC_DIR_INSTALL }}/run.sh"
-#                content: |
-#                  #!/usr/bin/env bash
-#
-#                  PID_LIST=()
-#
-#                  cd NFs/upf/build
-#                  sudo -E ./bin/free5gc-upfd &
-#                  PID_LIST+=($!)
-#
-#                  sleep 1
-#
-#                  cd ../../..
-#
-#                  NF_LIST="nrf amf smf udr pcf udm nssf ausf"
-#
-#                  export GIN_MODE=release
-#
-#                  for NF in ${NF_LIST}; do
-#                      ./bin/${NF} &
-#                      PID_LIST+=($!)
-#                      sleep 0.1
-#                  done
-#
-#                  #SUDO_N3IWF_PID=$!
-#                  #sleep 1
-#                  #N3IWF_PID=$(pgrep -P $SUDO_N3IWF_PID)
-#                  #PID_LIST+=($SUDO_N3IWF_PID $N3IWF_PID)
-#
-#                  function terminate()
-#                  {
-#                      sudo kill -SIGTERM ${PID_LIST[${#PID_LIST[@]}-2]} ${PID_LIST[${#PID_LIST[@]}-1]}
-#                      sleep 2
-#                  }
-#
-#                  trap terminate SIGINT
-#                  wait ${PID_LIST}
