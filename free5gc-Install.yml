@@ -16,7 +16,7 @@
             FREE5GC_GIT_CHECKOUT_URL_CIRO: "https://github.com/ciromacedo/free5gc-devmode.git"
             FREE5GC_CHECKOUT_FOLDER_NAME: "free5gc"
             PREDEFINED_IP_ADDRESS: "false"
-            FREE5GC: "false"
+            FREE5GC: "true"
             MONGO_URL_CONNECTION: "mongodb://127.0.0.1:27017"
             NRF_IP_ADDRESS: "127.0.0.10"
             NRF_PORT: "8000"
