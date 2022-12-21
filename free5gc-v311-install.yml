@@ -12,6 +12,7 @@
             NFS_DIR_CONFIG : "/root/go/src/free5gc/config"
             NRF_DIR : "/root/go/src/free5gc/NFs/nrf"
             UDR_DIR : "/root/go/src/free5gc/NFs/udr"
+            UDM_DIR : "/root/go/src/free5gc/NFs/udm"
             GO_SRC_DIR : "/root/go/src"
             HOME_DIR: "/root"
             FREE5GC_GIT_CHECKOUT_URL_FREEGC_TAG_VERSION: "--recursive -b v3.1.1 -j `nproc` https://github.com/free5gc/free5gc.git"
@@ -214,59 +215,60 @@
                       debugLevel: info
                       ReportCaller: false
 
-            
+            - name  : Create UDM config dir
+              shell : |
+                mkdir config
+                mkdir config/TLS
+              args:
+                chdir: "{{ UDM_DIR }}"
 
-            # - name  : Remove udmcfg.yaml default file config
-            #   shell : rm udmcfg.yaml
-            #   args:
-            #     chdir: "{{ NFS_DIR_CONFIG }}"
+            - name  : Copy UDM cert's 1/2
+              fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/udm.pem dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/udm/config/TLS/ flat=yes
+              
+            - name  : Copy UDM cert's 2/2
+              fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/udm.key dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/udm/config/TLS/ flat=yes
 
-            # - name  : Build udmcfg.yaml config file
-            #   copy:
-            #     dest: "{{ NFS_DIR_CONFIG }}/udmcfg.yaml"
-            #     content: |
-            #       info:
-            #         version: 1.0.0
-            #         description: UDM initial local configuration
+            - name  : Build udmcfg.yaml config file
+              copy:
+                dest: "{{ UDM_DIR }}/config/udmcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.2
+                    description: UDM initial local configuration
 
-            #       configuration:
-            #         serviceNameList: # the SBI services provided by this UDM, refer to TS 29.503
-            #           - nudm-sdm # Nudm_SubscriberDataManagement service
-            #           - nudm-uecm # Nudm_UEContextManagement service
-            #           - nudm-ueau # Nudm_UEAuthenticationManagement service
-            #           - nudm-ee # Nudm_EventExposureManagement service
-            #           - nudm-pp # Nudm_ParameterProvisionDataManagement service
-            #         sbi: # Service-based interface information
-            #           scheme: http # the protocol for sbi (http or https)
-            #           registerIPv4: {{ UDM_IP_ADDRESS }} # IP used to register to NRF
-            #           bindingIPv4: {{ UDM_IP_ADDRESS }}  # IP used to bind the service
-            #           port: {{ UDM_PORT }} # Port used to bind the service
-            #           tls: # the local path of TLS key
-            #             log: free5gc/udmsslkey.log # UDM keylog
-            #             pem: free5gc/support/TLS/udm.pem # UDM TLS Certificate
-            #             key: free5gc/support/TLS/udm.key # UDM TLS Private key
-            #         nrfUri: http://{{ NRF_IP_ADDRESS }}:{{ NRF_PORT }} # a valid URI of NRF
+                  configuration:
+                    serviceNameList: # the SBI services provided by this UDM, refer to TS 29.503
+                      - nudm-sdm # Nudm_SubscriberDataManagement service
+                      - nudm-uecm # Nudm_UEContextManagement service
+                      - nudm-ueau # Nudm_UEAuthenticationManagement service
+                      - nudm-ee # Nudm_EventExposureManagement service
+                      - nudm-pp # Nudm_ParameterProvisionDataManagement service
+                    sbi: # Service-based interface information
+                      scheme: http # the protocol for sbi (http or https)
+                      registerIPv4: {{ UDM_IP_ADDRESS }} # IP used to register to NRF
+                      bindingIPv4: {{ UDM_IP_ADDRESS }}  # IP used to bind the service
+                      port: {{ UDM_PORT }} # Port used to bind the service
+                      tls: # the local path of TLS key
+                        pem: config/TLS/udm.pem # UDM TLS Certificate
+                        key: config/TLS/udm.key # UDM TLS Private key
+                    nrfUri: http://{{ NRF_IP_ADDRESS }}:{{ NRF_PORT }} # a valid URI of NRF
 
-            #         # test data set from TS33501-f60 Annex C.4
-            #         keys:
-            #           udmProfileAHNPublicKey: 5a8d38864820197c3394b92613b20b91633cbd897119273bf8e4a6f4eec0a650
-            #           udmProfileAHNPrivateKey: c53c22208b61860b06c62e5406a7b330c2b577aa5558981510d128247d38bd1d
-            #           udmProfileBHNPublicKey: 0472DA71976234CE833A6907425867B82E074D44EF907DFB4B3E21C1C2256EBCD15A7DED52FCBB097A4ED250E036C7B9C8C7004C4EEDC4F068CD7BF8D3F900E3B4
-            #           udmProfileBHNPrivateKey: F1AB1074477EBCC7F554EA1C5FC368B1616730155E0041AC447D6301975FECDA
+                    # test data set from TS33501-f60 Annex C.4
+                    SuciProfile: # Home Network Public Key ID = slice index +1
+                      - ProtectionScheme: 1 # Protect Scheme: Profile A
+                        PrivateKey: c53c22208b61860b06c62e5406a7b330c2b577aa5558981510d128247d38bd1d
+                        PublicKey: 5a8d38864820197c3394b92613b20b91633cbd897119273bf8e4a6f4eec0a650
+                      - ProtectionScheme: 2 # Protect Scheme: Profile B
+                        PrivateKey: F1AB1074477EBCC7F554EA1C5FC368B1616730155E0041AC447D6301975FECDA
+                        PublicKey: 0472DA71976234CE833A6907425867B82E074D44EF907DFB4B3E21C1C2256EBCD15A7DED52FCBB097A4ED250E036C7B9C8C7004C4EEDC4F068CD7BF8D3F900E3B4
 
-            #       # the kind of log output
-            #         # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
-            #         # ReportCaller: enable the caller report or not, value: true or false
-            #       logger:
-            #         UDM:
-            #           debugLevel: info
-            #           ReportCaller: false
-            #         OpenApi:
-            #           debugLevel: info
-            #           ReportCaller: false
-            #         PathUtil:
-            #           debugLevel: info
-            #           ReportCaller: false
+                  # the kind of log output
+                  # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                  # ReportCaller: enable the caller report or not, value: true or false
+                  logger:
+                    UDM:
+                      debugLevel: info
+                      ReportCaller: false
 
             # - name  : Remove ausfcfg.yaml default file config
             #   shell : rm ausfcfg.yaml
