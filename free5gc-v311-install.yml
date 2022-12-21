@@ -10,6 +10,7 @@
             WEB_CONSOLE_FRONTEND_DIR : "/root/go/src/free5gc/webconsole/frontend"
             WEB_CONSOLE_BASE_DIR : "/root/go/src/free5gc/webconsole"
             NFS_DIR_CONFIG : "/root/go/src/free5gc/config"
+            NRF_DIR : "/root/go/src/free5gc/NFs/nrf"
             GO_SRC_DIR : "/root/go/src"
             HOME_DIR: "/root"
             FREE5GC_GIT_CHECKOUT_URL_FREEGC_TAG_VERSION: "--recursive -b v3.1.1 -j `nproc` https://github.com/free5gc/free5gc.git"
@@ -121,12 +122,11 @@
               shell : git clone {{ FREE5GC_GIT_CHECKOUT_URL_FREEGC_TAG_VERSION }} {{ FREE5GC_CHECKOUT_FOLDER_NAME }}
               args:
                 chdir: "{{ GO_SRC_DIR }}"
-           
 
-            # - name  : Remove nrfcfg.yaml default file config
-            #   shell : rm nrfcfg.yaml
-            #   args:
-            #     chdir: "{{ NFS_DIR_CONFIG }}"
+            - name  : Create NRF config dir
+              shell : mkdir config
+              args:
+                chdir: "{{ NRF_DIR }}"
 
             # - name  : Build nrfcfg.yaml config file
             #   copy:
