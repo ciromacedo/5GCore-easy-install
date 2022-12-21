@@ -14,7 +14,7 @@
             UDR_DIR : "/root/go/src/free5gc/NFs/udr"
             UDM_DIR : "/root/go/src/free5gc/NFs/udm"
             AUSF_DIR : "/root/go/src/free5gc/NFs/ausf"
-            NSSF_DIR : "/root/go/src/free5gc/NFs/ausf"
+            NSSF_DIR : "/root/go/src/free5gc/NFs/nssf"
             GO_SRC_DIR : "/root/go/src"
             HOME_DIR: "/root"
             FREE5GC_GIT_CHECKOUT_URL_FREEGC_TAG_VERSION: "--recursive -b v3.1.1 -j `nproc` https://github.com/free5gc/free5gc.git"
