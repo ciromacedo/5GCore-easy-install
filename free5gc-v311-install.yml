@@ -184,49 +184,37 @@
             - name  : Copy UDR cert's 2/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/udr.key dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/udr/config/TLS/ flat=yes
 
+            - name  : Build udrcfg.yaml config file
+              copy:
+                dest: "{{ UDR_DIR }}/config/udrcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.1
+                    description: UDR initial local configuration
+
+                  configuration:
+                    sbi: # Service-based interface information
+                      scheme: http # the protocol for sbi (http or https)
+                      registerIPv4: {{ UDR_IP_ADDRESS }} # IP used to register to NRF
+                      bindingIPv4: {{ UDR_IP_ADDRESS }}  # IP used to bind the service
+                      port: {{ UDR_PORT }} # port used to bind the service
+                      tls: # the local path of TLS key
+                        pem: config/TLS/udr.pem # UDR TLS Certificate
+                        key: config/TLS/udr.key # UDR TLS Private key
+                    mongodb:
+                      name: free5gc # Database name in MongoDB
+                      url: {{ MONGO_URL_CONNECTION }} # URL of MongoDB
+                    nrfUri: http://{{ NRF_IP_ADDRESS }}:{{ NRF_PORT }} # a valid URI of NRF
+
+                  # the kind of log output
+                  # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                  # ReportCaller: enable the caller report or not, value: true or false
+                  logger:
+                    UDR:
+                      debugLevel: info
+                      ReportCaller: false
 
             
-            
-            # - name  : Remove udrcfg.yaml default file config
-            #   shell : rm udrcfg.yaml
-            #   args:
-            #     chdir: "{{ NFS_DIR_CONFIG }}"
-
-            # - name  : Build udrcfg.yaml config file
-            #   copy:
-            #     dest: "{{ NFS_DIR_CONFIG }}/udrcfg.yaml"
-            #     content: |
-            #       info:
-            #         version: 1.0.0
-            #         description: UDR initial local configuration
-
-            #       configuration:
-            #         sbi: # Service-based interface information
-            #           scheme: http # the protocol for sbi (http or https)
-            #           registerIPv4: {{ UDR_IP_ADDRESS }} # IP used to register to NRF
-            #           bindingIPv4: {{ UDR_IP_ADDRESS }}  # IP used to bind the service
-            #           port: {{ UDR_PORT }} # port used to bind the service
-            #         mongodb:
-            #           name: free5gc # Database name in MongoDB
-            #           url: {{ MONGO_URL_CONNECTION }} # URL of MongoDB
-            #         nrfUri: http://{{ NRF_IP_ADDRESS }}:{{ NRF_PORT }} # a valid URI of NRF
-
-            #       # the kind of log output
-            #         # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
-            #         # ReportCaller: enable the caller report or not, value: true or false
-            #       logger:
-            #         UDR:
-            #           debugLevel: debug
-            #           ReportCaller: false
-            #         MongoDBLibrary:
-            #           debugLevel: info
-            #           ReportCaller: false
-            #         PathUtil:
-            #           debugLevel: info
-            #           ReportCaller: false
-            #         OpenApi:
-            #           debugLevel: info
-            #           ReportCaller: false
 
             # - name  : Remove udmcfg.yaml default file config
             #   shell : rm udmcfg.yaml
