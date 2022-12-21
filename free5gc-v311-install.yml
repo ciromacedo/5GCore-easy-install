@@ -710,7 +710,7 @@
 
             - name  : Build amfcfg.yaml config file
               copy:
-                dest: "{{ NFS_DIR_CONFIG }}/config/amfcfg.yaml"
+                dest: "{{ AMF_DIR }}/config/amfcfg.yaml"
                 content: |
                   info:
                     version: 1.0.3
