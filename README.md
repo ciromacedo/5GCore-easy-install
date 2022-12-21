@@ -7,7 +7,7 @@ The main objective of this project is to automate the installation process of [m
 
 Install python-minimal:
 ```
-sudo apt update && apt -y install python-minimal && sudo apt -y install git && sudo apt -y install ansible
+sudo apt update && apt -y install python && sudo apt -y install git && sudo apt -y install ansible
 ```
 
 
