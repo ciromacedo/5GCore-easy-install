@@ -124,9 +124,16 @@
                 chdir: "{{ GO_SRC_DIR }}"
 
             - name  : Create NRF config dir
-              shell : mkdir config
+              shell : |
+                mkdir config
+                mkdir config/TLS
               args:
                 chdir: "{{ NRF_DIR }}"
+
+            # - name  : Copy NRF TLS files
+            #   fetch: src=free5gc/config/app01-to-app02.jar dest=buffer/ flat=yes
+            #   args:
+            #     chdir: "{{ GO_SRC_DIR }}"
 
             # - name  : Build nrfcfg.yaml config file
             #   copy:
