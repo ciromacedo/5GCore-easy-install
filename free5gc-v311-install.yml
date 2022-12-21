@@ -1002,7 +1002,7 @@
 
             - name  : Build uerouting.yaml config file
               copy:
-                dest: "{{ SMF_DIR }}/config/smfcfg.yaml"
+                dest: "{{ SMF_DIR }}/config/uerouting.yaml"
                 content: |
                   info:
                     version: 1.0.1
