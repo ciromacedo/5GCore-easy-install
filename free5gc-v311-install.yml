@@ -130,18 +130,50 @@
               args:
                 chdir: "{{ NRF_DIR }}"
 
-            - name  : Copy NRF nrf.pen to TLS dir 1/2
+            - name  : Copy NRF cert's 1/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/nrf.pem dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/nrf/config/TLS/ flat=yes
               
+            - name  : Copy NRF cert's 2/2
+              fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/nrf.key dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/nrf/config/TLS/ flat=yes
 
-            # - name  : Copy NRF nrf.key to TLS dir 1/2
-            #   fetch: src={{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/nrf.key dest={{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/nrf/config/TLS/ flat=yes
-            #   args:
-            #     chdir: "{{ GO_SRC_DIR }}"
+            - name  : Build nrfcfg.yaml config file
+              copy:
+                dest: "{{ NRF_DIR }}/config/nrfcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.1
+                    description: NRF initial local configuration
+
+                  configuration:
+                    MongoDBName: free5gc # database name in MongoDB
+                    MongoDBUrl: {{ MONGO_URL_CONNECTION }} # a valid URL of the mongodb
+                    sbi: # Service-based interface information
+                      scheme: http # the protocol for sbi (http or https)
+                      registerIPv4: {{ NRF_IP_ADDRESS }} # IP used to serve NFs or register to another NRF
+                      bindingIPv4: {{ NRF_IP_ADDRESS }}  # IP used to bind the service
+                      port: {{ NRF_PORT }} # port used to bind the service
+                      tls: # the local path of TLS key
+                        pem: config/TLS/nrf.pem # NRF TLS Certificate
+                        key: config/TLS/nrf.key # NRF TLS Private key
+                    DefaultPlmnId:
+                      mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+                      mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+                    serviceNameList: # the SBI services provided by this NRF, refer to TS 29.510
+                      - nnrf-nfm # Nnrf_NFManagement service
+                      - nnrf-disc # Nnrf_NFDiscovery service
+
+                  # the kind of log output
+                  # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                  # ReportCaller: enable the caller report or not, value: true or false
+                  logger:
+                    NRF:
+                      debugLevel: info
+                      ReportCaller: false
+
 
             # - name  : Build nrfcfg.yaml config file
             #   copy:
-            #     dest: "{{ NFS_DIR_CONFIG }}/nrfcfg.yaml"
+            #     dest: "{{ NRF_DIR }}/config/nrfcfg.yaml"
             #     content: |
             #       info:
             #         version: 1.0.0
