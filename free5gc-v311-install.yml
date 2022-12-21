@@ -16,6 +16,7 @@
             AUSF_DIR : "/root/go/src/free5gc/NFs/ausf"
             NSSF_DIR : "/root/go/src/free5gc/NFs/nssf"
             AMF_DIR : "/root/go/src/free5gc/NFs/amf"
+            PCF_DIR : "/root/go/src/free5gc/NFs/pcf"
             GO_SRC_DIR : "/root/go/src"
             HOME_DIR: "/root"
             FREE5GC_GIT_CHECKOUT_URL_FREEGC_TAG_VERSION: "--recursive -b v3.1.1 -j `nproc` https://github.com/free5gc/free5gc.git"
@@ -832,56 +833,61 @@
                       debugLevel: info
                       ReportCaller: false
 
+            - name  : Create PCF config dir
+              shell : |
+                mkdir config
+                mkdir config/TLS
+              args:
+                chdir: "{{ PCF_DIR }}"
 
-            # - name  : Remove pcfcfg.yaml default file config
-            #   shell : rm pcfcfg.yaml
-            #   args:
-            #     chdir: "{{ NFS_DIR_CONFIG }}"
+            - name  : Copy PCF cert's 1/2
+              fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/pcf.pem dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/pcf/config/TLS/ flat=yes
+              
+            - name  : Copy AMF cert's 2/2
+              fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/pcf.key dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/pcf/config/TLS/ flat=yes
 
-            # - name  : Build pcfcfg.yaml config file
-            #   copy:
-            #     dest: "{{ NFS_DIR_CONFIG }}/pcfcfg.yaml"
-            #     content: |
-            #       info:
-            #         version: 1.0.0
-            #         description: PCF initial local configuration
+            - name  : Build pcfcfg.yaml config file
+              copy:
+                dest: "{{ PCF_DIR }}/config/pcfcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.1
+                    description: PCF initial local configuration
 
-            #       configuration:
-            #         pcfName: PCF # the name of this PCF
-            #         sbi: # Service-based interface information
-            #           scheme: http # the protocol for sbi (http or https)
-            #           registerIPv4: {{ PCF_IP_ADDRESS }} # IP used to register to NRF
-            #           bindingIPv4: {{ PCF_IP_ADDRESS }}  # IP used to bind the service
-            #           port: {{ PCF_PORT }}              # port used to bind the service
-            #         timeFormat: 2019-01-02 15:04:05 # time format of this PCF
-            #         defaultBdtRefId: BdtPolicyId-   # BDT Reference ID, indicating transfer policies of background data transfer.
-            #         nrfUri: http://{{ NRF_IP_ADDRESS }}:{{ NRF_PORT }}  # a valid URI of NRF
-            #         serviceList:   # the SBI services provided by this PCF, refer to TS 29.507
-            #           - serviceName: npcf-am-policy-control # Npcf_AMPolicyControl service
-            #           - serviceName: npcf-smpolicycontrol   # Npcf_SMPolicyControl service
-            #             suppFeat: 3fff # the features supported by Npcf_SMPolicyControl, name defined in TS 29.512 5.8-1, value defined in TS 29.571 5.2.2
-            #           - serviceName: npcf-bdtpolicycontrol    # Npcf_BDTPolicyControl service
-            #           - serviceName: npcf-policyauthorization # Npcf_PolicyAuthorization service
-            #             suppFeat: 3    # the features supported by Npcf_PolicyAuthorization, name defined in TS 29.514 5.8-1, value defined in TS 29.571 5.2.2
-            #           - serviceName: npcf-eventexposure       # Npcf_EventExposure service
-            #           - serviceName: npcf-ue-policy-control   # Npcf_UEPolicyControl service
-            #         mongodb:       # the mongodb connected by this PCF
-            #           name: free5gc                  # name of the mongodb
-            #           url: {{ MONGO_URL_CONNECTION }} # a valid URL of the mongodb
+                  configuration:
+                    pcfName: PCF # the name of this PCF
+                    sbi: # Service-based interface information
+                      scheme: http # the protocol for sbi (http or https)
+                      registerIPv4: {{ PCF_IP_ADDRESS }} # IP used to register to NRF
+                      bindingIPv4: {{ PCF_IP_ADDRESS }}  # IP used to bind the service
+                      port: {{ PCF_PORT }}            # port used to bind the service
+                      tls: # the local path of TLS key
+                        pem: config/TLS/pcf.pem # PCF TLS Certificate
+                        key: config/TLS/pcf.key # PCF TLS Private key
+                    timeFormat: 2019-01-02 15:04:05 # time format of this PCF
+                    defaultBdtRefId: BdtPolicyId-   # BDT Reference ID, indicating transfer policies of background data transfer.
+                    nrfUri: http://{{ NRF_IP_ADDRESS }}:{{ NRF_PORT }}  # a valid URI of NRF
+                    serviceList:   # the SBI services provided by this PCF, refer to TS 29.507
+                      - serviceName: npcf-am-policy-control # Npcf_AMPolicyControl service
+                      - serviceName: npcf-smpolicycontrol   # Npcf_SMPolicyControl service
+                        suppFeat: 3fff # the features supported by Npcf_SMPolicyControl, name defined in TS 29.512 5.8-1, value defined in TS 29.571 5.2.2
+                      - serviceName: npcf-bdtpolicycontrol    # Npcf_BDTPolicyControl service
+                      - serviceName: npcf-policyauthorization # Npcf_PolicyAuthorization service
+                        suppFeat: 3    # the features supported by Npcf_PolicyAuthorization, name defined in TS 29.514 5.8-1, value defined in TS 29.571 5.2.2
+                      - serviceName: npcf-eventexposure       # Npcf_EventExposure service
+                      - serviceName: npcf-ue-policy-control   # Npcf_UEPolicyControl service
+                    mongodb:       # the mongodb connected by this PCF
+                      name: free5gc                  # name of the mongodb
+                      url: {{ MONGO_URL_CONNECTION }} # a valid URL of the mongodb
+                    locality: area1 # Name of the location where a set of AMF, SMF, PCF and UPFs are located
 
-            #       # the kind of log output
-            #         # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
-            #         # ReportCaller: enable the caller report or not, value: true or false
-            #       logger:
-            #         PCF:
-            #           debugLevel: info
-            #           ReportCaller: false
-            #         PathUtil:
-            #           debugLevel: info
-            #           ReportCaller: false
-            #         OpenApi:
-            #           debugLevel: info
-            #           ReportCaller: false
+                  # the kind of log output
+                  # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                  # ReportCaller: enable the caller report or not, value: true or false
+                  logger:
+                    PCF:
+                      debugLevel: info
+                      ReportCaller: false
 
             # - name  : Remove smfcfg.yaml default file config
             #   shell : rm smfcfg.yaml
