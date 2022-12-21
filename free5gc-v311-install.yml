@@ -131,9 +131,8 @@
                 chdir: "{{ NRF_DIR }}"
 
             - name  : Copy NRF nrf.pen to TLS dir 1/2
-              fetch: src={{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/nrf.pem dest={{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/nrf/config/TLS/ flat=yes
-              args:
-                chdir: "{{ GO_SRC_DIR }}"
+              fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/nrf.pem dest={{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/nrf/config/TLS/ flat=yes
+              
 
             # - name  : Copy NRF nrf.key to TLS dir 1/2
             #   fetch: src={{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/nrf.key dest={{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/nrf/config/TLS/ flat=yes
