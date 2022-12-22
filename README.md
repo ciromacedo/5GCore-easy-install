@@ -1,11 +1,18 @@
 
 # 5GCore-easy-install
 
-The main objective of this project is to automate the installation process of [my5GCore](https://github.com/my5G/my5G-core) or [free5GC](https://github.com/free5gc/free5gc) projects, through Ansible.
+The main objective of this project is to automate the installation process of [free5GC-V3.1.1](https://github.com/free5gc/free5gc) project, through Ansible.
+
+## Installation Environment
+The content described in this repository was tested on a VM in the [Digital Occean](https://www.digitalocean.com/) cloud environment with the following configurations:
+* SO: Ubuntu 20.04 (LTS) x64
+* Uname -r: 5.4.0-122-generic
+* Memory: 4 GB
+* Disk: 80 GB
 
 **Steps**
 
-Install python-minimal:
+Install python + git + ansible:
 ```
 sudo apt update && apt -y install python && sudo apt -y install git && sudo apt -y install ansible
 ```
@@ -23,16 +30,6 @@ cd 5GCore-easy-install &&  ansible-playbook -K install-golang.yml
 source ~/.bashrc
 ```
 
-Check your kernel version with ```uname -r```, if the result is less then ```5.0.0-23-generic``` run the following:
-```
-sudo apt-get install -y linux-image-5.0.0-23-generic
-```
-In the action menu that appears, choose the first option "__install the package maintainer's version__" like as illustrated in the figure below, and after reboot the system.
-
-<p align="center">
-    <img src="imagens/kerner-5-0-23.jpeg" height="300"/> 
-</p>
-
 Run ```ifconfig``` and get the name of **internet network interface**, like as illustrated in the figure below:
 <p align="center">
     <img src="imagens/if_config.png"/> 
@@ -43,7 +40,7 @@ Run the following Ansible playbook (password for sudo is required):
 
 ### free5gc
 ```
-cd 5GCore-easy-install && ansible-playbook -K free5gc-Install.yml -e  "internet_network_interface=<< internet network interface name>>"
+cd 5GCore-easy-install && ansible-playbook -K free5gc-v311-install.yml -e  "internet_network_interface=<< internet network interface name>>"
 ```
 
 ### Start NFs Functions
