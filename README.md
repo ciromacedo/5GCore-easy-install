@@ -3,7 +3,7 @@
 
 The main objective of this project is to automate the installation process of [free5GC-V3.1.1](https://github.com/free5gc/free5gc) project, through Ansible.
 
-## Installation Environment
+#### Environment
 The content described in this repository was tested on a VM in the [Digital Occean](https://www.digitalocean.com/) cloud environment with the following configurations:
 * SO: Ubuntu 20.04 (LTS) x64
 * Uname -r: 5.4.0-122-generic

@@ -1231,4 +1231,156 @@
                         # [optional] dnn_list[*].natifname
                         # natifname: eth0
 
+            - name  : Create .run dir
+              shell : |
+                mkdir .run
+                
+              args:
+                chdir: "{{ FREE5GC_DIR_INSTALL }}"
 
+
+            - name  : Build A - NRF.run.xml config file
+              copy:
+                dest: "{{ FREE5GC_DIR_INSTALL }}/.run/A - NRF.run.xml"
+                content: |
+                  <component name="ProjectRunConfigurationManager">
+                    <configuration default="false" name="A - NRF" type="GoApplicationRunConfiguration" factoryName="Go Application" singleton="false">
+                      <module name="free5gc" />
+                      <working_directory value="$PROJECT_DIR$/NFs/nrf" />
+                      <kind value="PACKAGE" />
+                      <package value="github.com/free5gc/nrf/cmd" />
+                      <directory value="$PROJECT_DIR$" />
+                      <filePath value="$PROJECT_DIR$/NFs/nrf/cmd/main.go" />
+                      <method v="2" />
+                    </configuration>
+                  </component>  
+
+            - name  : Build B - UDR.run.xml config file
+              copy:
+                dest: "{{ FREE5GC_DIR_INSTALL }}/.run/B - UDR.run.xml"
+                content: |
+                  <component name="ProjectRunConfigurationManager">
+                    <configuration default="false" name="B - UDR" type="GoApplicationRunConfiguration" factoryName="Go Application" singleton="false">
+                      <module name="free5gc" />
+                      <working_directory value="$PROJECT_DIR$/NFs/udr" />
+                      <kind value="PACKAGE" />
+                      <package value="github.com/free5gc/udr/cmd" />
+                      <directory value="$PROJECT_DIR$" />
+                      <filePath value="$PROJECT_DIR$/NFs/udr/cmd/main.go" />
+                      <method v="2" />
+                    </configuration>
+                  </component>  
+
+            - name  : Build C - UDM.run.xml config file
+              copy:
+                dest: "{{ FREE5GC_DIR_INSTALL }}/.run/C - UDM.run.xml"
+                content: |
+                  <component name="ProjectRunConfigurationManager">
+                    <configuration default="false" name="C - UDM" type="GoApplicationRunConfiguration" factoryName="Go Application" singleton="false">
+                      <module name="free5gc" />
+                      <working_directory value="$PROJECT_DIR$/NFs/udm" />
+                      <kind value="PACKAGE" />
+                      <package value="github.com/free5gc/udm/cmd" />
+                      <directory value="$PROJECT_DIR$" />
+                      <filePath value="$PROJECT_DIR$/NFs/udm/cmd/main.go" />
+                      <method v="2" />
+                    </configuration>
+                  </component> 
+
+            - name  : Build D - AUSF.run.xml config file
+              copy:
+                dest: "{{ FREE5GC_DIR_INSTALL }}/.run/D - AUSF.run.xml"
+                content: |
+                  <component name="ProjectRunConfigurationManager">
+                    <configuration default="false" name="D - AUSF" type="GoApplicationRunConfiguration" factoryName="Go Application" singleton="false">
+                      <module name="free5gc" />
+                      <working_directory value="$PROJECT_DIR$/NFs/ausf" />
+                      <kind value="PACKAGE" />
+                      <package value="github.com/free5gc/ausf/cmd" />
+                      <directory value="$PROJECT_DIR$" />
+                      <filePath value="$PROJECT_DIR$/NFs/ausf/cmd/main.go" />
+                      <method v="2" />
+                    </configuration>
+                  </component> 
+
+            - name  : Build E - NSSF.run.xml config file
+              copy:
+                dest: "{{ FREE5GC_DIR_INSTALL }}/.run/E - NSSF.run.xml"
+                content: |
+                  <component name="ProjectRunConfigurationManager">
+                    <configuration default="false" name="E - NSSF" type="GoApplicationRunConfiguration" factoryName="Go Application" singleton="false">
+                      <module name="free5gc" />
+                      <working_directory value="$PROJECT_DIR$/NFs/nssf" />
+                      <kind value="PACKAGE" />
+                      <package value="github.com/free5gc/nssf/cmd" />
+                      <directory value="$PROJECT_DIR$" />
+                      <filePath value="$PROJECT_DIR$/NFs/nssf/cmd/main.go" />
+                      <method v="2" />
+                    </configuration>
+                  </component> 
+
+            - name  : Build F - AMF.run.xml config file
+              copy:
+                dest: "{{ FREE5GC_DIR_INSTALL }}/.run/F - AMF.run.xml"
+                content: |
+                  <component name="ProjectRunConfigurationManager">
+                    <configuration default="false" name="F - AMF" type="GoApplicationRunConfiguration" factoryName="Go Application" singleton="false">
+                      <module name="free5gc" />
+                      <working_directory value="$PROJECT_DIR$/NFs/amf" />
+                      <kind value="PACKAGE" />
+                      <package value="github.com/free5gc/amf/cmd" />
+                      <directory value="$PROJECT_DIR$" />
+                      <filePath value="$PROJECT_DIR$/NFs/amf/cmd/main.go" />
+                      <method v="2" />
+                    </configuration>
+                  </component> 
+
+            - name  : Build Free5GC-Base-Init.run.xml config file
+              copy:
+                dest: "{{ FREE5GC_DIR_INSTALL }}/.run/Free5GC-Base-Init.run.xml"
+                content: |
+                  <component name="ProjectRunConfigurationManager">
+                    <configuration default="false" name="Free5GC-Base-Init" type="CompoundRunConfigurationType">
+                      <toRun name="A - NRF" type="GoApplicationRunConfiguration" />
+                      <toRun name="B - UDR" type="GoApplicationRunConfiguration" />
+                      <toRun name="C - UDM" type="GoApplicationRunConfiguration" />
+                      <toRun name="D - AUSF" type="GoApplicationRunConfiguration" />
+                      <toRun name="E - NSSF" type="GoApplicationRunConfiguration" />
+                      <toRun name="F - AMF" type="GoApplicationRunConfiguration" />
+                      <toRun name="G - PCF" type="GoApplicationRunConfiguration" />
+                      <toRun name="I - SMF" type="GoApplicationRunConfiguration" />
+                      <method v="2" />
+                    </configuration>
+                  </component>  
+
+            - name  : Build G - PCF.run.xml config file
+              copy:
+                dest: "{{ FREE5GC_DIR_INSTALL }}/.run/G - PCF.run.xml"
+                content: |
+                  <component name="ProjectRunConfigurationManager">
+                    <configuration default="false" name="G - PCF" type="GoApplicationRunConfiguration" factoryName="Go Application" singleton="false">
+                      <module name="free5gc" />
+                      <working_directory value="$PROJECT_DIR$/NFs/pcf" />
+                      <kind value="PACKAGE" />
+                      <package value="github.com/free5gc/pcf/cmd" />
+                      <directory value="$PROJECT_DIR$" />
+                      <filePath value="$PROJECT_DIR$/NFs/pcf/cmd/main.go" />
+                      <method v="2" />
+                    </configuration>
+                  </component> 
+
+            - name  : Build I - SMF.run.xml config file
+              copy:
+                dest: "{{ FREE5GC_DIR_INSTALL }}/.run/I - SMF.run.xml"
+                content: |
+                  <component name="ProjectRunConfigurationManager">
+                    <configuration default="false" name="I - SMF" type="GoApplicationRunConfiguration" factoryName="Go Application" singleton="false">
+                      <module name="free5gc" />
+                      <working_directory value="$PROJECT_DIR$/NFs/smf" />
+                      <kind value="PACKAGE" />
+                      <package value="github.com/free5gc/smf/cmd" />
+                      <directory value="$PROJECT_DIR$" />
+                      <filePath value="$PROJECT_DIR$/NFs/smf/cmd/main.go" />
+                      <method v="2" />
+                    </configuration>
+                  </component>                                                                                                                                      
