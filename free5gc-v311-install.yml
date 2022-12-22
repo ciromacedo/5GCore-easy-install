@@ -1111,7 +1111,7 @@
                         Port: {{ N3IWF_AMF_SCTP_PORT }}
 
                     # --- Bind Interfaces ---
-                    IKEBindAddress: {{ N3IWF_IKE_BIND_ADDRESS }} # IP address of Nwu interface (IKE) on this N3IWF
+                    IKEBindAddress: {{ AMF_NGAP_IP_ADDRESS }} # IP address of Nwu interface (IKE) on this N3IWF
 
                     IPSecInterfaceAddress: {{ N3IWF_IP_SEC_INTERFACE_ADDRESS }} # IP address of IPSec virtual interface (IPsec tunnel enpoint on this N3IWF)
 
@@ -1119,12 +1119,11 @@
 
                     IPSecInterfaceMark: {{ N3IWF_IP_SEC_INTERFACE_MARK }} # IPSec virtual interface mark (Any value except to 0, default value is 7 if not defined)
 
-                    GTPBindAddress: {{ N3IWF_GTP_BIND_ADDRESS }} # IP address of N3 interface (GTP) on this N3IWF
+                    GTPBindAddress: {{ AMF_NGAP_IP_ADDRESS }} # IP address of N3 interface (GTP) on this N3IWF
 
                     NASTCPPort: {{ N3IWF_NAS_TCP_PORT }} # TCP port which the NAS listens on
 
                     FQDN: n3iwf.free5gc.org # FQDN of this N3IWF
-
 
                     # --- Security ---
                     PrivateKey: config/TLS/n3iwf.key # Private key file path
@@ -1383,4 +1382,12 @@
                       <filePath value="$PROJECT_DIR$/NFs/smf/cmd/main.go" />
                       <method v="2" />
                     </configuration>
-                  </component>                                                                                                                                      
+                  </component>   
+
+            - name  : Config N3IWF env
+              shell : |
+                ip link add name ipsec0 type vti local $(hostname -i | awk '{print $1}') remote 0.0.0.0 key 5
+                ip a add 10.0.0.1/24 dev ipsec0
+                ip l set dev ipsec0 up
+                
+                                                                                                                                               
