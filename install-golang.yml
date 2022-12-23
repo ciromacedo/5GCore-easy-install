@@ -36,7 +36,10 @@
               shell:  sudo tar -C /usr/local -zxvf go1.14.4.linux-amd64.tar.gz
 
             - name: Install Go 1.14.4 - 3/5
-              shell:  mkdir -p ~/go/{bin,pkg,src}
+              shell:  |
+                    mkdir ~/go/bin
+                    mkdir ~/go/pkg
+                    mkdir ~/go/src
 
             - name: Install Go 1.14.4 - 4/5
               shell:  |

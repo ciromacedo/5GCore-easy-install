@@ -68,6 +68,8 @@
     
             - set_fact:
                 AMF_NGAP_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                N3IWF_IKE_BIND_ADDRESS: "{{ ansible_default_ipv4.address }}"
+                N3IWF_GTP_BIND_ADDRESS: "{{ ansible_default_ipv4.address }}"
                 SMF_N3_INTERFACE_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
                 SMF_N4_INTERFACE_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
                 GTPU_UPF_IP_ADDRESS: "{{ ansible_default_ipv4.address }}"
@@ -1111,7 +1113,7 @@
                         Port: {{ N3IWF_AMF_SCTP_PORT }}
 
                     # --- Bind Interfaces ---
-                    IKEBindAddress: {{ AMF_NGAP_IP_ADDRESS }} # IP address of Nwu interface (IKE) on this N3IWF
+                    IKEBindAddress: {{ N3IWF_IKE_BIND_ADDRESS }} # IP address of Nwu interface (IKE) on this N3IWF
 
                     IPSecInterfaceAddress: {{ N3IWF_IP_SEC_INTERFACE_ADDRESS }} # IP address of IPSec virtual interface (IPsec tunnel enpoint on this N3IWF)
 
