@@ -5,6 +5,7 @@
         remote_user: root
         vars:
             build_webconsole:  "false"
+            install_n3iwf: "false"
             GTP5G_DIR_INSTALL : "/root/gtp5g"
             FREE5GC_DIR_INSTALL : "/root/go/src/free5gc"
             UPF_DIR_CONFIG : "/root/go/src/free5gc/NFs/upf/build/config"
@@ -1073,6 +1074,7 @@
                 mkdir config/TLS
               args:
                 chdir: "{{ N3IWF_DIR }}"
+              when: install_n3iwf == 'true'
 
             - name  : Copy N3IWF cert's 1/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/n3iwf.pem dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/n3iwf/config/TLS/ flat=yes
@@ -1147,15 +1149,8 @@
                     Aper:
                       debugLevel: info
                       ReportCaller: false
-                        
 
-           
-
-            # - name  : Checkout the WebConsole version v1.0.1 - required for free5gc version is v3.0.5
-            #   shell : git checkout v1.0.1
-            #   args:
-            #     chdir: "{{ WEB_CONSOLE_BASE_DIR }}"
-            #   when  : FREE5GC == 'true'
+              when: install_n3iwf == 'true'          
 
             - name  : Remove webuicfg.yaml default file config
               shell : rm config/webuicfg.yaml
@@ -1395,5 +1390,9 @@
                 ip link add name ipsec0 type vti local $(hostname -i | awk '{print $1}') remote 0.0.0.0 key 5
                 ip a add 10.0.0.1/24 dev ipsec0
                 ip l set dev ipsec0 up
-                
-                                                                                                                                               
+              when: install_n3iwf == 'true'  
+
+            - name: Remove N3IWF dir (if exists)
+              shell:  sudo rm -rf {{ N3IWF_DIR }}
+              ignore_errors: true
+              when: install_n3iwf == 'true'                                                                                                                                   
