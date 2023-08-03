@@ -125,7 +125,7 @@
                 chdir: "{{ HOME_DIR }}"
                      
             - name  : Run 'Make' into GTP5G
-              shell : make
+              shell : make clean && make
               args:
                 chdir: "{{ GTP5G_DIR_INSTALL }}"
 
