@@ -1272,6 +1272,135 @@
             - name  : Copy AMF cert's 2/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/amf.key dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/amf/config/TLS/ flat=yes
 
+            - name  : Remove AMF default config file
+              shell :  rm amfcfg.yaml
+              args:
+                chdir: "{{ NFS_DIR_CONFIG }}"
+
+            - name  : Build amfcfg.yaml config file into base config dir
+              copy:
+                dest: "{{ NFS_DIR_CONFIG }}/amfcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.3
+                    description: AMF initial local configuration
+
+                  configuration:
+                    amfName: AMF # the name of this AMF
+                    ngapIpList:  # the IP list of N2 interfaces on this AMF
+                      - {{ AMF_NGAP_IP_ADDRESS }}
+                    sbi: # Service-based interface information
+                      scheme: http # the protocol for sbi (http or https)
+                      registerIPv4: {{ AMF_IP_ADDRESS }} # IP used to register to NRF
+                      bindingIPv4: {{ AMF_IP_ADDRESS }}  # IP used to bind the service
+                      port: {{ AMF_PORT }} # port used to bind the service
+                      tls: # the local path of TLS key
+                        pem: config/TLS/amf.pem # AMF TLS Certificate
+                        key: config/TLS/amf.key # AMF TLS Private key
+                    serviceNameList: # the SBI services provided by this AMF, refer to TS 29.518
+                      - namf-comm # Namf_Communication service
+                      - namf-evts # Namf_EventExposure service
+                      - namf-mt   # Namf_MT service
+                      - namf-loc  # Namf_Location service
+                      - namf-oam  # OAM service
+                    servedGuamiList: # Guami (Globally Unique AMF ID) list supported by this AMF
+                      # <GUAMI> = <MCC><MNC><AMF ID>
+                      - plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
+                          mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+                          mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+                        amfId: cafe00 # AMF identifier (3 bytes hex string, range: 000000~FFFFFF)
+                    supportTaiList:  # the TAI (Tracking Area Identifier) list supported by this AMF
+                      - plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
+                          mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+                          mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+                        tac: 1 # Tracking Area Code (uinteger, range: 0~16777215)
+                    plmnSupportList: # the PLMNs (Public land mobile network) list supported by this AMF
+                      - plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
+                          mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+                          mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+                        snssaiList: # the S-NSSAI (Single Network Slice Selection Assistance Information) list supported by this AMF
+                          - sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+                            sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+                          - sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+                            sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+                    supportDnnList:  # the DNN (Data Network Name) list supported by this AMF
+                      - internet
+                    nrfUri: http://{{ NRF_IP_ADDRESS }}:{{ NRF_PORT }} # a valid URI of NRF
+                    security:  # NAS security parameters
+                      integrityOrder: # the priority of integrity algorithms
+                        - NIA2
+                        # - NIA0
+                      cipheringOrder: # the priority of ciphering algorithms
+                        - NEA0
+                        # - NEA2
+                    networkName:  # the name of this core network
+                      full: free5GC
+                      short: free
+                    locality: area1 # Name of the location where a set of AMF, SMF and UPFs are located
+                    networkFeatureSupport5GS: # 5gs Network Feature Support IE, refer to TS 24.501
+                      enable: true # append this IE in Registration accept or not
+                      length: 1 # IE content length (uinteger, range: 1~3)
+                      imsVoPS: 0 # IMS voice over PS session indicator (uinteger, range: 0~1)
+                      emc: 0 # Emergency service support indicator for 3GPP access (uinteger, range: 0~3)
+                      emf: 0 # Emergency service fallback indicator for 3GPP access (uinteger, range: 0~3)
+                      iwkN26: 0 # Interworking without N26 interface indicator (uinteger, range: 0~1)
+                      mpsi: 0 # MPS indicator (uinteger, range: 0~1)
+                      emcN3: 0 # Emergency service support indicator for Non-3GPP access (uinteger, range: 0~1)
+                      mcsi: 0 # MCS indicator (uinteger, range: 0~1)
+                    t3502Value: 720  # timer value (seconds) at UE side
+                    t3512Value: 3600 # timer value (seconds) at UE side
+                    non3gppDeregistrationTimerValue: 3240 # timer value (seconds) at UE side
+                    # retransmission timer for paging message
+                    t3513:
+                      enable: true     # true or false
+                      expireTime: 6s   # default is 6 seconds
+                      maxRetryTimes: 4 # the max number of retransmission
+                    # retransmission timer for NAS Deregistration Request message
+                    t3522:
+                      enable: true     # true or false
+                      expireTime: 6s   # default is 6 seconds
+                      maxRetryTimes: 4 # the max number of retransmission
+                    # retransmission timer for NAS Registration Accept message
+                    t3550:
+                      enable: true     # true or false
+                      expireTime: 6s   # default is 6 seconds
+                      maxRetryTimes: 4 # the max number of retransmission
+                    # retransmission timer for NAS Authentication Request/Security Mode Command message
+                    t3560:
+                      enable: true     # true or false
+                      expireTime: 6s   # default is 6 seconds
+                      maxRetryTimes: 4 # the max number of retransmission
+                    # retransmission timer for NAS Notification message
+                    t3565:
+                      enable: true     # true or false
+                      expireTime: 6s   # default is 6 seconds
+                      maxRetryTimes: 4 # the max number of retransmission
+                    # retransmission timer for NAS Identity Request message
+                    t3570:
+                      enable: true     # true or false
+                      expireTime: 6s   # default is 6 seconds
+                      maxRetryTimes: 4 # the max number of retransmission
+
+                  # the kind of log output
+                  # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                  # ReportCaller: enable the caller report or not, value: true or false
+                  logger:
+                    AMF:
+                      debugLevel: info
+                      ReportCaller: false
+                    NAS:
+                      debugLevel: info
+                      ReportCaller: false
+                    FSM:
+                      debugLevel: info
+                      ReportCaller: false
+                    NGAP:
+                      debugLevel: info
+                      ReportCaller: false
+                    Aper:
+                      debugLevel: info
+                      ReportCaller: false
+
             - name  : Build amfcfg.yaml config file
               copy:
                 dest: "{{ AMF_DIR }}/config/amfcfg.yaml"
@@ -1409,6 +1538,55 @@
             - name  : Copy AMF cert's 2/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/pcf.key dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/pcf/config/TLS/ flat=yes
 
+            - name  : Remove PCF default config file
+              shell :  rm pcfcfg.yaml
+              args:
+                chdir: "{{ NFS_DIR_CONFIG }}"
+
+            - name  : Build pcfcfg.yaml config file into base config dir
+              copy:
+                dest: "{{ NFS_DIR_CONFIG }}/pcfcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.1
+                    description: PCF initial local configuration
+
+                  configuration:
+                    pcfName: PCF # the name of this PCF
+                    sbi: # Service-based interface information
+                      scheme: http # the protocol for sbi (http or https)
+                      registerIPv4: {{ PCF_IP_ADDRESS }} # IP used to register to NRF
+                      bindingIPv4: {{ PCF_IP_ADDRESS }}  # IP used to bind the service
+                      port: {{ PCF_PORT }}            # port used to bind the service
+                      tls: # the local path of TLS key
+                        pem: config/TLS/pcf.pem # PCF TLS Certificate
+                        key: config/TLS/pcf.key # PCF TLS Private key
+                    timeFormat: 2019-01-02 15:04:05 # time format of this PCF
+                    defaultBdtRefId: BdtPolicyId-   # BDT Reference ID, indicating transfer policies of background data transfer.
+                    nrfUri: http://{{ NRF_IP_ADDRESS }}:{{ NRF_PORT }}  # a valid URI of NRF
+                    serviceList:   # the SBI services provided by this PCF, refer to TS 29.507
+                      - serviceName: npcf-am-policy-control # Npcf_AMPolicyControl service
+                      - serviceName: npcf-smpolicycontrol   # Npcf_SMPolicyControl service
+                        suppFeat: 3fff # the features supported by Npcf_SMPolicyControl, name defined in TS 29.512 5.8-1, value defined in TS 29.571 5.2.2
+                      - serviceName: npcf-bdtpolicycontrol    # Npcf_BDTPolicyControl service
+                      - serviceName: npcf-policyauthorization # Npcf_PolicyAuthorization service
+                        suppFeat: 3    # the features supported by Npcf_PolicyAuthorization, name defined in TS 29.514 5.8-1, value defined in TS 29.571 5.2.2
+                      - serviceName: npcf-eventexposure       # Npcf_EventExposure service
+                      - serviceName: npcf-ue-policy-control   # Npcf_UEPolicyControl service
+                    mongodb:       # the mongodb connected by this PCF
+                      name: free5gc                  # name of the mongodb
+                      url: {{ MONGO_URL_CONNECTION }} # a valid URL of the mongodb
+                    locality: area1 # Name of the location where a set of AMF, SMF, PCF and UPFs are located
+
+                  # the kind of log output
+                  # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                  # ReportCaller: enable the caller report or not, value: true or false
+                  logger:
+                    PCF:
+                      debugLevel: info
+                      ReportCaller: false
+
+
             - name  : Build pcfcfg.yaml config file
               copy:
                 dest: "{{ PCF_DIR }}/config/pcfcfg.yaml"
@@ -1464,6 +1642,106 @@
               
             - name  : Copy SMF cert's 2/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/smf.key dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/smf/config/TLS/ flat=yes
+
+            - name  : Remove SMF default config file
+              shell :  rm smfcfg.yaml
+              args:
+                chdir: "{{ NFS_DIR_CONFIG }}"
+
+            - name  : Build smfcfg.yaml config file into base config dir
+              copy:
+                dest: "{{ NFS_DIR_CONFIG }}/smfcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.2
+                    description: SMF initial local configuration
+
+                  configuration:
+                    smfName: SMF # the name of this SMF
+                    sbi: # Service-based interface information
+                      scheme: http # the protocol for sbi (http or https)
+                      registerIPv4: {{ SMF_IP_ADDRESS }} # IP used to register to NRF
+                      bindingIPv4: {{ SMF_IP_ADDRESS }}  # IP used to bind the service
+                      port: {{ SMF_PORT }} # Port used to bind the service
+                      tls: # the local path of TLS key
+                        key: config/TLS/smf.key # SMF TLS Certificate
+                        pem: config/TLS/smf.pem # SMF TLS Private key
+                    serviceNameList: # the SBI services provided by this SMF, refer to TS 29.502
+                      - nsmf-pdusession # Nsmf_PDUSession service
+                      - nsmf-event-exposure # Nsmf_EventExposure service
+                      - nsmf-oam # OAM service
+                    snssaiInfos: # the S-NSSAI (Single Network Slice Selection Assistance Information) list supported by this AMF
+                      - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+                          sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+                          sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+                        dnnInfos: # DNN information list
+                          - dnn: internet # Data Network Name
+                            dns: # the IP address of DNS
+                              ipv4: 8.8.8.8
+                      - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+                          sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+                          sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+                        dnnInfos: # DNN information list
+                          - dnn: internet # Data Network Name
+                            dns: # the IP address of DNS
+                              ipv4: 8.8.8.8
+                    plmnList: # the list of PLMN IDs that this SMF belongs to (optional, remove this key when unnecessary)
+                      - mcc: "208" # Mobile Country Code (3 digits string, digit: 0~9)
+                        mnc: "93" # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+                    locality: area1 # Name of the location where a set of AMF, SMF and UPFs are located
+                    pfcp: # the IP address of N4 interface on this SMF (PFCP)
+                      addr: {{ SMF_N4_INTERFACE_IP_ADDRESS }}
+                    userplaneInformation: # list of userplane information
+                      upNodes: # information of userplane node (AN or UPF)
+                        gNB1: # the name of the node
+                          type: AN # the type of the node (AN or UPF)
+                        UPF:  # the name of the node
+                          type: UPF # the type of the node (AN or UPF)
+                          nodeID: {{ UPF_IP_ADDRESS   }} # the IP/FQDN of N4 interface on this UPF (PFCP)
+                          sNssaiUpfInfos: # S-NSSAI information list for this UPF
+                            - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+                                sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+                                sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+                              dnnUpfInfoList: # DNN information list for this S-NSSAI
+                                - dnn: internet
+                                  pools:
+                                    - cidr: 10.60.0.0/16
+                            - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+                                sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+                                sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+                              dnnUpfInfoList: # DNN information list for this S-NSSAI
+                                - dnn: internet
+                                  pools:
+                                    - cidr: 10.61.0.0/16
+                          interfaces: # Interface list for this UPF
+                            - interfaceType: N3 # the type of the interface (N3 or N9)
+                              endpoints: # the IP address of this N3/N9 interface on this UPF
+                                - {{ SMF_N3_INTERFACE_IP_ADDRESS }}
+                              networkInstance: internet # Data Network Name (DNN)
+                      links: # the topology graph of userplane, A and B represent the two nodes of each link
+                        - A: gNB1
+                          B: UPF
+                    nrfUri: http://{{ NRF_IP_ADDRESS }}:{{ NRF_PORT }} # a valid URI of NRF
+
+                  # the kind of log output
+                  # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                  # ReportCaller: enable the caller report or not, value: true or false
+                  logger:
+                    SMF:
+                      debugLevel: info
+                      ReportCaller: false
+                    NAS:
+                      debugLevel: info
+                      ReportCaller: false
+                    NGAP:
+                      debugLevel: info
+                      ReportCaller: false
+                    Aper:
+                      debugLevel: info
+                      ReportCaller: false
+                    PFCP:
+                      debugLevel: info
+                      ReportCaller: false
 
             - name  : Build smfcfg.yaml config file
               copy:
@@ -1560,6 +1838,56 @@
                       debugLevel: info
                       ReportCaller: false
 
+            - name  : Remove UEROUTING default config file
+              shell :  rm uerouting.yaml
+              args:
+                chdir: "{{ NFS_DIR_CONFIG }}"
+
+            - name  : Build uerouting.yaml config file into base config dir
+              copy:
+                dest: "{{ NFS_DIR_CONFIG }}/uerouting.yaml"
+                content: |
+                  info:
+                    version: 1.0.1
+                    description: Routing information for UE
+
+                  ueRoutingInfo: # the list of UE routing information
+                    UE1: # Group Name
+                      members:
+                      - imsi-2089300007487 # Subscription Permanent Identifier of the UE
+                      - imsi-2089300007488
+                      - imsi-2089300007489
+                      - imsi-2089300007440
+                      - imsi-2089300007441
+                      topology: # Network topology for this group (Uplink: A->B, Downlink: B->A)
+                      # default path derived from this topology
+                      # node name should be consistent with smfcfg.yaml
+                        - A: gNB1
+                          B: BranchingUPF
+                        - A: BranchingUPF
+                          B: AnchorUPF1
+                      specificPath:
+                        - dest: 10.60.0.103/32 # the destination IP address on Data Network (DN)
+                          # the order of UPF nodes in this path. We use the UPF's name to represent each UPF node.
+                          # The UPF's name should be consistent with smfcfg.yaml
+                          path: [BranchingUPF, AnchorUPF2]
+
+                    UE2: # Group Name
+                      members:
+                      - imsi-2089300007486 # Subscription Permanent Identifier of the UE
+                      topology: # Network topology for this group (Uplink: A->B, Downlink: B->A)
+                      # default path derived from this topology
+                      # node name should be consistent with smfcfg.yaml
+                        - A: gNB1
+                          B: BranchingUPF
+                        - A: BranchingUPF
+                          B: AnchorUPF1
+                      specificPath:
+                        - dest: 10.0.0.11/32 # the destination IP address on Data Network (DN)
+                          # the order of UPF nodes in this path. We use the UPF's name to represent each UPF node.
+                          # The UPF's name should be consistent with smfcfg.yaml
+                          path: [BranchingUPF, AnchorUPF2]
+
             - name  : Build uerouting.yaml config file
               copy:
                 dest: "{{ SMF_DIR }}/config/uerouting.yaml"
@@ -1572,6 +1900,10 @@
                     UE1: # Group Name
                       members:
                       - imsi-2089300007487 # Subscription Permanent Identifier of the UE
+                      - imsi-2089300007488
+                      - imsi-2089300007489
+                      - imsi-2089300007440
+                      - imsi-2089300007441
                       topology: # Network topology for this group (Uplink: A->B, Downlink: B->A)
                       # default path derived from this topology
                       # node name should be consistent with smfcfg.yaml
@@ -1611,10 +1943,12 @@
 
             - name  : Copy N3IWF cert's 1/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/n3iwf.pem dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/n3iwf/config/TLS/ flat=yes
-              
+               when: install_n3iwf == 'true'
+
             - name  : Copy N3IWF cert's 2/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/n3iwf.key dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/n3iwf/config/TLS/ flat=yes
-
+               when: install_n3iwf == 'true'
+               
             - name  : Build n3iwfcfg.yaml config file
               copy:
                 dest: "{{ N3IWF_DIR }}/config/n3iwfcfg.yaml"
