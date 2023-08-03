@@ -1395,4 +1395,4 @@
             - name: Remove N3IWF dir (if exists)
               shell:  sudo rm -rf {{ N3IWF_DIR }}
               ignore_errors: true
-              when: install_n3iwf == 'true'                                                                                                                                   
+              when: install_n3iwf == 'false'                                                                                                                                   
