@@ -4,6 +4,7 @@
         become: yes
         remote_user: root
         vars:
+            build_webconsole:  "false"
             GTP5G_DIR_INSTALL : "/root/gtp5g"
             FREE5GC_DIR_INSTALL : "/root/go/src/free5gc"
             UPF_DIR_CONFIG : "/root/go/src/free5gc/NFs/upf/build/config"
@@ -19,7 +20,6 @@
             PCF_DIR : "/root/go/src/free5gc/NFs/pcf"
             SMF_DIR : "/root/go/src/free5gc/NFs/smf"
             N3IWF_DIR : "/root/go/src/free5gc/NFs/n3iwf"
-            
             GO_SRC_DIR : "/root/go/src"
             HOME_DIR: "/root"
             FREE5GC_GIT_CHECKOUT_URL_FREEGC_TAG_VERSION: "--recursive -b v3.1.1 -j `nproc` https://github.com/free5gc/free5gc.git"
@@ -1188,12 +1188,14 @@
                     cp -R build ../public
               args:
                 chdir: "{{ WEB_CONSOLE_FRONTEND_DIR }}"
+              when: build_webconsole == 'true'
 
             - name  : Build WebConsole
               shell :  |
                     go build -o bin/webconsole server.go
               args:
                 chdir: "{{ WEB_CONSOLE_BASE_DIR }}"
+              when: build_webconsole == 'true'
 
             - name  : Remove UPF default file config
               shell : rm upfcfg.yaml
