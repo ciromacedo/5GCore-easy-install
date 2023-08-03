@@ -1943,12 +1943,12 @@
 
             - name  : Copy N3IWF cert's 1/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/n3iwf.pem dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/n3iwf/config/TLS/ flat=yes
-               when: install_n3iwf == 'true'
+              when: install_n3iwf == 'true'
 
             - name  : Copy N3IWF cert's 2/2
               fetch: src={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/config/TLS/n3iwf.key dest={{ GO_SRC_DIR }}/{{ FREE5GC_CHECKOUT_FOLDER_NAME }}/NFs/n3iwf/config/TLS/ flat=yes
-               when: install_n3iwf == 'true'
-               
+              when: install_n3iwf == 'true'
+
             - name  : Build n3iwfcfg.yaml config file
               copy:
                 dest: "{{ N3IWF_DIR }}/config/n3iwfcfg.yaml"
