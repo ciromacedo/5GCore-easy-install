@@ -2059,6 +2059,11 @@
                 chdir: "{{ WEB_CONSOLE_BASE_DIR }}"
               when: build_webconsole == 'true'
 
+            - name  : Remove UPF file config into default config dir
+              shell : rm upfcfg.yaml
+              args:
+                chdir: "{{ NFS_DIR_CONFIG }}"
+
             - name  : Remove UPF default file config
               shell : rm upfcfg.yaml
               args:
@@ -2067,6 +2072,40 @@
             - name  : Build upfcfg.yaml config file
               copy:
                 dest: "{{ UPF_DIR_CONFIG }}/upfcfg.yaml"
+                content: |
+                  info:
+                    version: 1.0.0
+                    description: UPF configuration
+                  
+                  configuration:
+                    # the kind of log output
+                      # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+                      # ReportCaller: enable the caller report or not, value: true or false
+                    debugLevel: info
+                    ReportCaller: false
+
+                    # The IP list of the N4 interface on this UPF (Can't set to 0.0.0.0)
+                    pfcp:
+                      - addr: {{ UPF_IP_ADDRESS }}
+                    # The IP list of the N3/N9 interfaces on this UPF
+                    # If there are multiple connection, set addr to 0.0.0.0 or list all the addresses
+                    gtpu:
+                      - addr: {{ GTPU_UPF_IP_ADDRESS }}
+                      # [optional] gtpu.name
+                      # - name: upf.5gc.nctu.me
+                      # [optional] gtpu.ifname
+                      # - ifname: gtpif
+
+                    # The DNN list supported by UPF
+                    dnn_list:
+                      - dnn: internet # Data Network Name
+                        cidr: 60.60.0.0/24 # Classless Inter-Domain Routing for assigned IPv4 pool of UE
+                        # [optional] dnn_list[*].natifname
+                        # natifname: eth0
+
+            - name  : Build upfcfg.yaml config file into default config dir
+              copy:
+                dest: "{{ NFS_DIR_CONFIG }}/upfcfg.yaml"
                 content: |
                   info:
                     version: 1.0.0
