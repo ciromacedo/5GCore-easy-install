@@ -48,7 +48,7 @@
             SMF_IP_ADDRESS: "127.0.0.2"
             SMF_PORT: "8000"
             UPF_IP_ADDRESS: "127.0.0.8"
-            GTPU_UPF_IP_ADDRESS: "10.10.10.2"
+            GTPU_UPF_IP_ADDRESS: "192.168.60.146"
             N3IWF_AMF_SCTP_PORT: "38412"
             N3IWF_IKE_BIND_ADDRESS: "127.0.0.21"
             N3IWF_IP_SEC_INTERFACE_ADDRESS: "10.0.0.1"
@@ -1728,19 +1728,19 @@
                   # ReportCaller: enable the caller report or not, value: true or false
                   logger:
                     SMF:
-                      debugLevel: info
+                      debugLevel: trace
                       ReportCaller: false
                     NAS:
-                      debugLevel: info
+                      debugLevel: trace
                       ReportCaller: false
                     NGAP:
-                      debugLevel: info
+                      debugLevel: trace
                       ReportCaller: false
                     Aper:
-                      debugLevel: info
+                      debugLevel: trace
                       ReportCaller: false
                     PFCP:
-                      debugLevel: info
+                      debugLevel: trace
                       ReportCaller: false
 
             - name  : Build smfcfg.yaml config file
