@@ -2081,8 +2081,8 @@
                     # the kind of log output
                       # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
                       # ReportCaller: enable the caller report or not, value: true or false
-                    debugLevel: info
-                    ReportCaller: false
+                    debugLevel: trace
+                    ReportCaller: true
 
                     # The IP list of the N4 interface on this UPF (Can't set to 0.0.0.0)
                     pfcp:
@@ -2116,7 +2116,7 @@
                       # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
                       # ReportCaller: enable the caller report or not, value: true or false
                     debugLevel: trace
-                    ReportCaller: false
+                    ReportCaller: true
 
                     # The IP list of the N4 interface on this UPF (Can't set to 0.0.0.0)
                     pfcp:
