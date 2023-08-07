@@ -48,7 +48,7 @@
             SMF_IP_ADDRESS: "127.0.0.2"
             SMF_PORT: "8000"
             UPF_IP_ADDRESS: "127.0.0.8"
-            GTPU_UPF_IP_ADDRESS: "192.168.60.146"
+            GTPU_UPF_IP_ADDRESS: "10.10.10.2"
             N3IWF_AMF_SCTP_PORT: "38412"
             N3IWF_IKE_BIND_ADDRESS: "127.0.0.21"
             N3IWF_IP_SEC_INTERFACE_ADDRESS: "10.0.0.1"
@@ -92,9 +92,6 @@
             - name: Install WebConsole front-end dependencies - 1/3
               shell :  |
                     sudo apt update && sudo apt -y install yarn
-#                    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-#                    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-#                    sudo apt update && sudo apt -y install yarn
 
             - name: Remove NodeJS Old version - 2/3
               shell :  |
