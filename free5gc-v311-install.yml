@@ -45,10 +45,11 @@
             PCF_PORT: "8000"
             SMF_N3_INTERFACE_IP_ADDRESS: "10.10.10.2"
             SMF_N4_INTERFACE_IP_ADDRESS: "10.10.10.2"
+            GTPU_UPF_IP_ADDRESS: "10.10.10.2"
+            UPF_CLASSLESS_IPV4_POOL_UE : "60.60.0.0/24"
             SMF_IP_ADDRESS: "127.0.0.2"
             SMF_PORT: "8000"
             UPF_IP_ADDRESS: "127.0.0.8"
-            GTPU_UPF_IP_ADDRESS: "10.10.10.2"
             N3IWF_AMF_SCTP_PORT: "38412"
             N3IWF_IKE_BIND_ADDRESS: "127.0.0.21"
             N3IWF_IP_SEC_INTERFACE_ADDRESS: "10.0.0.1"
@@ -2096,7 +2097,7 @@
                     # The DNN list supported by UPF
                     dnn_list:
                       - dnn: internet # Data Network Name
-                        cidr: 60.60.0.0/24 # Classless Inter-Domain Routing for assigned IPv4 pool of UE
+                        cidr: {{ UPF_CLASSLESS_IPV4_POOL_UE  }} # Classless Inter-Domain Routing for assigned IPv4 pool of UE
                         # [optional] dnn_list[*].natifname
                         # natifname: eth0
 
@@ -2130,7 +2131,7 @@
                     # The DNN list supported by UPF
                     dnn_list:
                       - dnn: internet # Data Network Name
-                        cidr: 60.60.0.0/24 # Classless Inter-Domain Routing for assigned IPv4 pool of UE
+                        cidr: {{ UPF_CLASSLESS_IPV4_POOL_UE  }} # Classless Inter-Domain Routing for assigned IPv4 pool of UE
                         # [optional] dnn_list[*].natifname
                         # natifname: eth0
 
